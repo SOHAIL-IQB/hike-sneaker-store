@@ -1,6 +1,6 @@
 // GA4 analytics helper
 // To enable, add your GA4 measurement ID below
-const GA_MEASUREMENT_ID = "";
+const GA_MEASUREMENT_ID = "G-RVBB8Q0CW5";
 
 export const trackEvent = (
   eventName: string,
