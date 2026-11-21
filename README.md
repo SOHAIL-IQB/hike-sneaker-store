@@ -60,14 +60,15 @@ Everything runs in the browser. Products are static data; the bag, favourites an
 - **Bag:** slide-out drawer plus a full bag page, with quantity and size changes and a free-delivery progress bar.
 - **Checkout:** three steps (delivery → payment → review) with inline validation and an animated order confirmation.
 - **Saved in the browser:** favourites, recently viewed and the bag persist in `localStorage` and stay in sync across tabs.
-- **Search overlay:** press <kbd>⌘</kbd> <kbd>K</kbd> or <kbd>/</kbd> to open it.
+- **Search overlay:** press <kbd>⌘</kbd> <kbd>K</kbd> (<kbd>Ctrl</kbd> <kbd>K</kbd> on Windows and Linux) to open it.
 
 **Quality**
 - **Motion:** smooth scrolling with [Lenis](https://github.com/darkroomengineering/lenis) and spring animations with Framer Motion. Everything turns off for `prefers-reduced-motion`.
-- **Accessibility:** keyboard reachable throughout, visible focus rings, a skip link, dialogs built on Radix with proper focus trapping, and labelled controls.
-- **Performance:** route-level code splitting, a self-hosted variable font, and WebP product images.
+- **Accessibility (WCAG 2.2 AA target):** keyboard reachable throughout, visible focus rings, a skip link, dialogs built on Radix that trap focus and hand it back to the button that opened them, a title and announcement for every page change, labelled and validated form fields, and control borders that meet 3:1 contrast.
+- **Performance:** route-level code splitting with idle prefetch, a self-hosted variable font, trimmed WebP product images, analytics loaded after the page, and long-lived caching for hashed assets.
+- **Security:** security headers on every response (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`) and a Content-Security-Policy; saved cart data is validated against the catalogue before it is trusted; the demo checkout never asks for payment details.
 - **SPA rewrites** on Vercel, so deep links survive a refresh.
-- **CI:** lint, unit tests and production build on every push.
+- **Tests and CI:** 265 unit and component tests; lint, tests, a dependency audit and the production build run on every push and pull request, with least-privilege permissions and pinned actions.
 
 ## Analytics (GA4)
 
@@ -80,7 +81,9 @@ The GA4 tag (`G-RVBB8Q0CW5`) loads in [`index.html`](index.html). Events go thro
 | `begin_checkout` | Checkout is started from the bag drawer or bag page | `value`, `items[]` |
 | `purchase` | The demo order is placed | `transaction_id`, `value`, `shipping`, `items[]` |
 
-In development, every event is also logged to the console.
+Version 2 adds a `currency: "USD"` parameter to `add_to_cart`, `begin_checkout` and `purchase` so GA4 can report revenue. Nothing was renamed or removed.
+
+The GA4 tag is bootstrapped from [`public/ga-init.js`](public/ga-init.js) and only sends data from the production host. Localhost and preview deployments get a no-op `gtag`, so development never pollutes the real reports. In development, every event is also logged to the console.
 
 ## Tech stack
 
@@ -92,7 +95,7 @@ In development, every event is also logged to the console.
 | UI primitives | Radix UI (Dialog, Accordion), Lucide icons |
 | Routing | React Router 6 |
 | Font | Archivo variable (width axis 62–125), self-hosted |
-| Testing | Vitest + Testing Library |
+| Testing | Vitest + Testing Library (265 tests) |
 | Hosting | Vercel |
 
 The design system (tokens, type scale, motion rules and components) is documented in **[DESIGN.md](DESIGN.md)**.

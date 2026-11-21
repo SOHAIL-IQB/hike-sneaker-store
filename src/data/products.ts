@@ -106,7 +106,7 @@ export const products: Product[] = [
       { id: "volt", name: "Volt / Black", swatch: ["#D7F23A", "#111111"] },
     ]),
     sizes: ADULT_SIZES,
-    rank: 4,
+    rank: 5,
     released: "2025-11-04",
   },
   {
@@ -146,7 +146,7 @@ export const products: Product[] = [
       { id: "black", name: "Triple Black", swatch: ["#151515", "#151515"] },
     ]),
     sizes: ADULT_SIZES,
-    rank: 6,
+    rank: 7,
     released: "2026-10-12",
   },
   {
@@ -164,7 +164,7 @@ export const products: Product[] = [
     specs: runSpecs("254 g", "10 mm", "33 mm"),
     colorways: cw("pacer-2", [{ id: "sky", name: "Sky Blue / White", swatch: ["#8EC5F0", "#FFFFFF"] }]),
     sizes: ADULT_SIZES,
-    rank: 9,
+    rank: 10,
     released: "2025-03-18",
   },
   {
@@ -184,7 +184,7 @@ export const products: Product[] = [
       { id: "stone", name: "Stone / Black", swatch: ["#A39A8C", "#111111"] },
     ]),
     sizes: ADULT_SIZES,
-    rank: 5,
+    rank: 6,
     released: "2026-06-02",
   },
 
@@ -210,7 +210,7 @@ export const products: Product[] = [
       { id: "sand", name: "Sand / Gum", swatch: ["#D8C7A8", "#A86E3A"] },
     ]),
     sizes: ADULT_SIZES,
-    rank: 3,
+    rank: 4,
     released: "2025-09-20",
   },
   {
@@ -234,7 +234,7 @@ export const products: Product[] = [
       { id: "graphite", name: "Graphite / White", swatch: ["#4A4F57", "#FFFFFF"] },
     ]),
     sizes: ADULT_SIZES,
-    rank: 7,
+    rank: 8,
     released: "2026-04-15",
   },
   {
@@ -259,7 +259,7 @@ export const products: Product[] = [
       { id: "forest", name: "White / Forest", swatch: ["#FFFFFF", "#1F5B3A"] },
     ]),
     sizes: ADULT_SIZES,
-    rank: 8,
+    rank: 9,
     released: "2024-08-01",
   },
   {
@@ -283,7 +283,7 @@ export const products: Product[] = [
       { id: "grey", name: "Grey / Ember", swatch: ["#8C9096", "#FF5A1F"] },
     ]),
     sizes: ADULT_SIZES,
-    rank: 10,
+    rank: 11,
     released: "2026-09-05",
   },
   {
@@ -304,7 +304,7 @@ export const products: Product[] = [
     ],
     colorways: cw("slip-easy", [{ id: "oat", name: "Oat / White", swatch: ["#E2D6C1", "#FFFFFF"] }]),
     sizes: ADULT_SIZES,
-    rank: 14,
+    rank: 15,
     released: "2026-05-22",
   },
 
@@ -330,7 +330,7 @@ export const products: Product[] = [
       { id: "red", name: "Signal Red", swatch: ["#D62828", "#111111"] },
     ]),
     sizes: ADULT_SIZES,
-    rank: 11,
+    rank: 12,
     released: "2025-12-01",
   },
   {
@@ -352,7 +352,7 @@ export const products: Product[] = [
     ],
     colorways: cw("circuit-tr", [{ id: "teal", name: "Teal / Black", swatch: ["#1A8C8C", "#111111"] }]),
     sizes: ADULT_SIZES,
-    rank: 13,
+    rank: 14,
     released: "2025-01-14",
   },
   {
@@ -376,7 +376,7 @@ export const products: Product[] = [
       { id: "white", name: "White / Grey", swatch: ["#F4F4F4", "#9BA0A6"] },
     ]),
     sizes: ADULT_SIZES,
-    rank: 15,
+    rank: 16,
     released: "2026-07-08",
   },
 
@@ -402,7 +402,7 @@ export const products: Product[] = [
       { id: "white-royal", name: "White / Royal", swatch: ["#F4F4F4", "#2B4DB8"] },
     ]),
     sizes: ADULT_SIZES,
-    rank: 2,
+    rank: 3,
     released: "2026-10-28",
   },
   {
@@ -423,7 +423,7 @@ export const products: Product[] = [
     ],
     colorways: cw("court-vision-mid", [{ id: "white-red", name: "White / Red", swatch: ["#F4F4F4", "#C8102E"] }]),
     sizes: ADULT_SIZES,
-    rank: 12,
+    rank: 13,
     released: "2025-10-10",
   },
   {
@@ -445,7 +445,7 @@ export const products: Product[] = [
     ],
     colorways: cw("fastbreak-low", [{ id: "mint", name: "Mint / White", swatch: ["#9FE2C8", "#FFFFFF"] }]),
     sizes: ADULT_SIZES,
-    rank: 16,
+    rank: 17,
     released: "2025-02-01",
   },
   {
@@ -466,7 +466,7 @@ export const products: Product[] = [
     ],
     colorways: cw("hoop-lite-kids", [{ id: "ember", name: "Ember / Black", swatch: ["#FF5A1F", "#111111"] }]),
     sizes: KIDS_SIZES,
-    rank: 17,
+    rank: 18,
     released: "2026-08-19",
   },
 ];
@@ -480,8 +480,19 @@ export const getColorway = (product: Product, colorwayId?: string | null) =>
 
 export const isOnSale = (p: Product) => p.compareAt !== undefined && p.compareAt > p.price;
 
-export const formatPrice = (n: number) =>
-  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: n % 1 ? 2 : 0 }).format(n);
+export const formatPrice = (n: number) => {
+  const digits = n % 1 ? 2 : 0;
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: digits, maximumFractionDigits: digits }).format(n);
+};
+
+/** Readable, unique style code: product initials, catalogue position and colourway position (e.g. HK-AR-001-02). */
+export const styleCode = (product: Product, colorway: Colorway) => {
+  const words = product.id.split("-");
+  const initials = words.length > 1 ? words.map((w) => w[0]).join("") : product.id.slice(0, 2);
+  const productIndex = String(products.findIndex((p) => p.id === product.id) + 1).padStart(3, "0");
+  const colorIndex = String(Math.max(0, product.colorways.findIndex((c) => c.id === colorway.id)) + 1).padStart(2, "0");
+  return `HK-${initials.toUpperCase()}-${productIndex}-${colorIndex}`;
+};
 
 export type SortKey = "featured" | "newest" | "price-asc" | "price-desc";
 
@@ -499,10 +510,11 @@ const normalise = (s: string) => s.toLowerCase().normalize("NFD").replace(/[Ì€-Í
 export const matchesQuery = (p: Product, query: string) => {
   const q = normalise(query.trim());
   if (!q) return true;
-  const haystack = normalise(
-    [p.name, p.tagline, p.category, p.gender, ...p.colorways.map((c) => c.name)].join(" "),
-  );
-  return q.split(/\s+/).every((term) => haystack.includes(term));
+  const words = normalise([p.name, p.tagline, p.category, p.gender, ...p.colorways.map((c) => c.name)].join(" "))
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter(Boolean);
+  // Each term must start a word, so "men" finds Men but not Women.
+  return q.split(/\s+/).every((term) => words.some((w) => w.startsWith(term)));
 };
 
 export const filterProducts = (list: Product[], f: ProductFilters) =>

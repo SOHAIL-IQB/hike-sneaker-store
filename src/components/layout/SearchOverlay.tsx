@@ -18,11 +18,10 @@ export default function SearchOverlay() {
     if (!searchOpen) setQ("");
   }, [searchOpen]);
 
-  // ⌘K / Ctrl+K and "/" open search from anywhere.
+  // ⌘K / Ctrl+K opens search from anywhere. (No single-key shortcut, so speech and switch users can't trigger it by accident.)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      const typing = (e.target as HTMLElement)?.closest("input, textarea, [contenteditable]");
-      if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !typing)) {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setSearchOpen(true);
       }
@@ -60,12 +59,15 @@ export default function SearchOverlay() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search shoes, colours, sports…"
+            autoComplete="off"
             className="h-14 w-full bg-transparent text-lg outline-none placeholder:text-muted-foreground"
           />
-          <kbd className="hidden rounded-md border border-surface-3 px-2 py-0.5 text-xs text-muted-foreground sm:block">esc</kbd>
         </label>
       </form>
 
+      <p role="status" className="sr-only">
+        {q.trim() ? `${results.length} ${results.length === 1 ? "result" : "results"}` : ""}
+      </p>
       <div className="max-h-[60vh] overflow-y-auto px-5 pb-5" data-lenis-prevent>
         {!q.trim() ? (
           <div className="pt-3">

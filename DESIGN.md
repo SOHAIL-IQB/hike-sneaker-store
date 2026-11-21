@@ -124,7 +124,7 @@ components:
 
 Every shoe is staged as a lit object in a dark room. The page is a near-black stage with cool steel surfaces; the only warm colour is a single ember signal reserved for action. The light in the room is not fixed: an ambient glow token (`--glow`) is re-tinted at runtime from the most saturated swatch of the colourway on show, so switching shoe or colourway changes the colour of the whole stage. A faint 64px engineering grid, fading out toward the edges, sits under hero and feature stages.
 
-Type does the shouting. Headlines are Archivo stretched to its widest (wdth 125), extra-bold, upper case and tightly set; everything else is Archivo at normal width, quiet and legible. Motion is soft and long: one exponential ease, blur-to-sharp entrances, springs for anything the hand touches, and Lenis smooth scrolling. With reduced motion, everything is static.
+Type does the shouting. Headlines are Archivo stretched to its widest (wdth 125), extra-bold, upper case and tightly set; everything else is Archivo at normal width, quiet and legible. Motion is soft and long: one exponential ease, blur-to-sharp entrances, springs for anything the hand touches, and Lenis smooth scrolling. Under reduced motion the stage stays lit but still: no transforms, loops or smooth scrolling.
 
 The theme is dark only (`color-scheme: dark`). There is no light mode to maintain.
 
@@ -134,7 +134,7 @@ The theme is dark only (`color-scheme: dark`). There is no light mode to maintai
 - Colourway-driven ambient light (`--glow`) as the signature device.
 - Expanded, extra-bold, upper-case display type over normal-width UI text.
 - Pills everywhere you click; generously rounded (28px) cards and panels.
-- Blur-to-sharp rises, spring tilts and orbit rings; all of it off under reduced motion.
+- Blur-to-sharp rises, spring tilts and orbit rings; transforms and loops are off under reduced motion.
 
 ## Colors
 
@@ -152,8 +152,9 @@ A cold, near-monochrome night palette with one hot signal and one borrowed light
 - **Stage Black** (#06070A): page background and text on light/ember fills.
 - **Steel Surface** (#101217): cards, inputs, the header island and overlay panels.
 - **Steel Raised** (#181B21): hover fills for ghost and outline buttons, icon buttons, menu rows.
-- **Steel High** (#24272E): outline-button strokes, stepper and field borders, scrollbar thumb.
+- **Steel High** (#24272E): outline-button strokes, scrollbar thumb. Interactive control borders use Control instead.
 - **Hairline** (#22252B): default dividers and borders.
+- **Control** (`--control`, hsl 222 8% 42%): the border colour for interactive controls (inputs, chips, size pills, swatch rings, outline icon buttons), at least 3:1 against every surface. Use `border-control` / `ring-control`; hairlines stay for decoration.
 - **Field Stroke** (#32363E): the input token stroke.
 - **Chalk** (#F2F3F6): primary text and the primary (light) button fill.
 - **Fog** (#93979F): secondary text, labels, legends. 6.9:1 against Stage Black.
@@ -165,7 +166,7 @@ A cold, near-monochrome night palette with one hot signal and one borrowed light
 ### Named Rules
 **The One Ember Rule.** Ember is the only warm UI colour, and it means "act" or "deal". It is never used as decoration, as a section background, or for a heading.
 
-**The Borrowed Light Rule.** Atmospheric colour comes from the product, never from a palette pick. Glows, card light and the hero stage read `--glow`; set it from `glowFromSwatch()` on the element that owns the colourway.
+**The Borrowed Light Rule.** Atmospheric colour comes from the product, never from a palette pick. Glows, card light and the hero stage read `--glow`; set it from `glowFromSwatch()` on the element that owns the colourway. Soft pools of that light are the `.glow-pool` utility (a radial gradient, so no extra blur filter is needed); Tailwind's `bg-glow` is the solid colour, for dots and beads.
 
 ## Typography
 
@@ -193,7 +194,7 @@ Prices and counts always use tabular figures.
 
 Content sits in a centred container capped at 1440px, with side gutters of 20px (mobile), 32px (md) and 48px (lg). The header is a floating island 12 to 16px from the top edge; pages reserve 72px for it (`--header-h`) and start their content at about 112 to 144px.
 
-Home sections are separated by 112px on mobile and 144px from md up. The hero is a two-column stage on large screens (copy and buy box left, shoe right at roughly 1.15 to 1 width) and stacks shoe-first on mobile, the shoe capped at min(88vw, 46svh). Product grids are dense, two up on mobile and three to four up on desktop, with a filter rail on the listing page. The home page carries one scroll-pinned sequence (a 260vh "lab" section) where the shoe rotates and spec callouts draw in.
+Home sections are separated by 112px on mobile and 144px from md up. The hero is a two-column stage on large screens (copy and buy box left, the shoe right at about half the viewport width: `min(58vw, …)`, never shorter than 44vw) and stacks shoe-first on mobile, the shoe capped at min(88vw, 46svh). Product grids are dense, two up on mobile and three to four up on desktop, with a filter rail on the listing page. The home page carries one scroll-pinned sequence (a 260vh "lab" section) where the shoe turns a few degrees and spec callouts draw in. The callout layer shares the shoe's box, so each dot stays on its part of the shoe (weight at the heel, foam stack in the midsole, drop at the forefoot). The pin is used only from 768px wide and 640px tall, and not under reduced motion; elsewhere the section is a static layout in its final state.
 
 **The Stage-First Rule.** On any surface that sells one shoe, the shoe gets the largest area on the screen, and type never overlaps it.
 
@@ -225,16 +226,17 @@ Tactile and quiet at rest, lit on hover.
 - **States:** every button scales to 0.97 on press; disabled is 40% opacity. Transitions are 300ms on the site ease.
 
 ### Chips and Swatches
-- **Size and filter chips:** 40px tall, 12px corners, Steel High stroke at rest; selected is a Chalk fill with Stage Black text. Category tabs and other segmented choices are pills whose selection indicator slides between options on a spring.
-- **Colourway swatches:** 20px circles split diagonally into the colourway's two colours, ringed in Chalk when active and 15% white otherwise. Hover or focus previews that colourway in place.
+- **Size and filter chips:** 40px tall, 12px corners, Control stroke at rest; selected is a Chalk fill with Stage Black text. Category tabs and other segmented choices are pills whose selection indicator slides between options on a spring.
+- **Colourway swatches:** 20px circles split diagonally into the colourway's two colours inside a 24px (cards) or 32px (hero) hit area, ringed in Chalk when active and in Control otherwise. On product cards, hover or click previews that colourway in place; focus alone never changes content.
+- **Size pills:** the hero uses a radiogroup of 44px-tall, 12px-cornered pills with a Control stroke; selected is a Chalk fill, sold out is struck through and disabled. Arrow keys move the selection.
 
 ### Cards / Containers
-- **Product card** (adapted from the 21st.dev "Product Card" by ravikatiyar162): 4:5 Steel Surface tile, 28px corners, 6% white hairline, Edge light. It tilts up to 7 to 9 degrees toward the pointer on a spring, a 260px glow in the colourway's colour follows the cursor, and the shoe floats forward on its own depth layer, lifting and turning slightly on hover. A small masked grid and a resting pool of colourway light sit under the shoe. Badges top left, favourite top right, swatches bottom left; name, price and tagline sit below the tile, not on it.
+- **Product card** (adapted from the 21st.dev "Product Card" by ravikatiyar162): 4:5 Steel Surface tile, 28px corners, 6% white hairline, Edge light. On a hovering fine pointer (and not under reduced motion) it tilts up to 7 to 9 degrees toward the pointer on a spring and a 260px glow in the colourway's colour follows the cursor; the shoe floats forward on its own depth layer, lifting and turning slightly on hover. The shoe image never animates a blur, so the CSS drop-shadow stays visible. A small masked grid and a resting pool of colourway light sit under the shoe. Badges top left, favourite top right, swatches bottom left; name, price and tagline sit below the tile, not on it.
 - **Panels and overlays:** Steel Surface at 86% with backdrop blur, 28px corners, Island shadow.
 
 ### Inputs / Fields
-- **Style:** 56px tall, Steel Surface fill, Steel High stroke, 16px corners, 20px inner padding, label above in 0.875rem medium.
-- **Focus:** the stroke turns Ember; the global focus ring (2px Ember, 3px offset) applies to every other control.
+- **Style:** 56px tall, Steel Surface fill, Control stroke, 16px corners, 20px inner padding, label above in 0.875rem medium.
+- **Focus:** the stroke turns Ember and the global focus ring (2px Ember, 3px offset) shows as well; inputs never suppress the outline. Every field has a visible label.
 - **Error:** Alarm Red stroke and an Alarm Red message below, wired with `aria-describedby`.
 
 ### Navigation
@@ -244,18 +246,18 @@ Tactile and quiet at rest, lit on hover.
 - **Mobile:** a slide-in menu and a slide-in bag drawer share one overlay component.
 
 ### Hero Showcase (signature)
-Adapted from the 21st.dev "Spatial Product Showcase" by daiwiikharihar. The active shoe floats inside two orbit rings (dashed outer ring turning once per 40s, solid inner ring the other way once per 60s, with a glowing bead), over a breathing pool of `--glow` light, with a slight pointer parallax. A floating dock switches between four featured shoes; each switch re-tints the stage light and the shoe blurs out and springs back in. The buy box (name, tagline, price, size row, "Add to bag") lives beside it.
+Adapted from the 21st.dev "Spatial Product Showcase" by daiwiikharihar. The active shoe floats inside two orbit rings (dashed outer ring turning once per 40s, solid inner ring the other way once per 60s, with a glowing bead), over a breathing pool of `--glow` light, with a slight pointer parallax. A floating dock (a group of toggle buttons, with a polite live region announcing the change) switches between four featured shoes, each opening on a colourway that lights the stage differently: Air Runner in Black/Ember (ember), Tempo Elite in Electric Blue (blue), Velocity in Volt (yellow-green) and Glide Max in Lilac (lilac). Each switch re-tints the stage light and the shoe blurs out and springs back in; the first image does not animate in, so it can be the LCP element. The buy box sits beside it: name, then the tagline as a muted subhead (no label above the heading), price, a colourway swatch row, the size pills and "Add to bag". Picking a colourway swaps the shoe and re-tints the light; a size that is sold out in the new colourway is dropped from the selection. At the 10-per-size limit the button reports it inline instead of opening the bag.
 
 ### Motion
 - **Ease:** one curve for the whole site, `cubic-bezier(0.16, 1, 0.3, 1)`.
 - **Rise:** sections enter from 28px below, 10px blur and zero opacity to sharp in 0.9s, once, when 12% into view; children stagger by 80ms.
 - **Springs:** layout and pill indicators (stiffness 260, damping 30), card tilt (220, 22), colourway image swaps (200, 22).
 - **Smooth scroll:** Lenis, skipped entirely under reduced motion.
-- **Reduced motion:** all CSS animations and transitions collapse to 0.01ms, orbit rings and glows stop, and entrances render in place.
+- **Reduced motion:** the whole app runs under `MotionConfig reducedMotion="user"`. Transform and layout animations are skipped (nothing slides, scales or tilts) while opacity fades are kept, so content still appears gently. Infinite loops (orbit rings, glow pulse, float) and Lenis are off, CSS animations and transitions collapse to 0.01ms, the lab section is static, and the marquee stops. Outside reduced motion the marquee pauses on hover and on focus-within.
 
 ## Product imagery
 
-Shoes are cut-outs on transparent WebP, one per colourway, in `src/assets/products/`. Two are original, logo-free AI-generated renders (Air Runner in Black/Ember and Flex Motion in Ember); the other 28 colourways are derived from those two by `scripts/recolor-colorways.ts`, which recolours the upper and the sole as two separate regions. No image carries another brand's mark. New shoes follow the same rule: transparent cut-out, three-quarter side view, no logos, two-tone colourway listed as a swatch pair.
+Shoes are cut-outs on transparent WebP, one per colourway, in `src/assets/products/`. Two are original, logo-free AI-generated renders (Air Runner in Black/Ember and Flex Motion in Ember); the other 28 colourways are derived from those two by `scripts/recolor-colorways.ts`, which recolours the upper and the sole as two separate regions. Every file, the two originals included, is trimmed to its alpha bounding box with about 3% transparent padding and capped at 800px on the longest side (WebP, quality 82), so a shoe fills the box it is placed in; the script is idempotent and re-running it with `--force` regenerates the 28 derived images from the trimmed originals. Light colourways use softer contrast and a lightness floor so no dark mesh speckle or brown cast shows. No image carries another brand's mark. New shoes follow the same rule: transparent cut-out, three-quarter side view, no logos, two-tone colourway listed as a swatch pair.
 
 ## Do's and Don'ts
 

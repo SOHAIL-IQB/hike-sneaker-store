@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ShoppingBag, Trash2 } from "lucide-react";
@@ -6,13 +7,26 @@ import QtyStepper from "@/components/common/QtyStepper";
 import OrderSummary from "@/components/common/OrderSummary";
 import ProductRail from "@/components/product/ProductRail";
 import { formatPrice, getColorway, products, sortProducts } from "@/data/products";
-import { useShop } from "@/store/ShopProvider";
+import { useShop, type DetailedLine } from "@/store/ShopProvider";
 import { trackBeginCheckout } from "@/lib/analytics";
 import { EASE } from "@/lib/motion";
 
 export default function Cart() {
   const { bag, bagCount, subtotal, setQuantity, changeSize, removeLine } = useShop();
   const navigate = useNavigate();
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const removeButtons = useRef(new Map<string, HTMLButtonElement>());
+  const [announcement, setAnnouncement] = useState("");
+
+  /** Removes a line, then keeps keyboard focus nearby: the next row, the previous row, or the heading. */
+  const remove = (line: DetailedLine) => {
+    const i = bag.findIndex((l) => l.key === line.key);
+    const neighbour = bag[i + 1] ?? bag[i - 1];
+    removeLine(line.key);
+    setAnnouncement(`Removed ${line.product.name}`);
+    const target = neighbour ? removeButtons.current.get(neighbour.key) : undefined;
+    (target ?? headingRef.current)?.focus();
+  };
 
   const checkout = () => {
     trackBeginCheckout(bag, subtotal);
@@ -22,7 +36,10 @@ export default function Cart() {
   return (
     <main id="main" className="pt-28 md:pt-36">
       <div className="container max-w-[1440px]">
-        <h1 className="text-display text-[clamp(2.5rem,7vw,5.5rem)]">
+        <p role="status" className="sr-only">
+          {announcement}
+        </p>
+        <h1 ref={headingRef} tabIndex={-1} className="text-display text-[clamp(2.5rem,7vw,5.5rem)]">
           Bag <span className="tabular align-top text-[0.35em] text-muted-foreground">{bagCount}</span>
         </h1>
 
@@ -61,11 +78,11 @@ export default function Cart() {
                       </div>
                       <div className="flex flex-wrap items-center gap-3">
                         <label className="text-sm">
-                          <span className="sr-only">Size</span>
+                          <span className="sr-only">Size for {line.product.name}</span>
                           <select
                             value={line.size}
                             onChange={(e) => changeSize(line.key, e.target.value)}
-                            className="tabular h-10 rounded-full border border-surface-3 bg-surface-2 px-4 text-sm"
+                            className="tabular h-10 rounded-full border border-control bg-surface-2 px-4 text-sm"
                           >
                             {line.product.sizes.map((s) => {
                               const out = getColorway(line.product, line.colorwayId).soldOut?.includes(s);
@@ -81,7 +98,12 @@ export default function Cart() {
                         <QtyStepper value={line.quantity} onChange={(n) => setQuantity(line.key, n)} label={line.product.name} />
                         <button
                           type="button"
-                          onClick={() => removeLine(line.key)}
+                          ref={(el) => {
+                            if (el) removeButtons.current.set(line.key, el);
+                            else removeButtons.current.delete(line.key);
+                          }}
+                          onClick={() => remove(line)}
+                          aria-label={`Remove ${line.product.name}, size ${line.size}`}
                           className="ml-auto inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm text-muted-foreground hover:bg-surface-2 hover:text-foreground"
                         >
                           <Trash2 className="h-4 w-4" strokeWidth={1.75} /> Remove

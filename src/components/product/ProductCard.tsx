@@ -1,6 +1,6 @@
-import { useState, type MouseEvent } from "react";
+import { memo, useRef, useState, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
-import { AnimatePresence, motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useMotionTemplate, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import type { Product } from "@/data/products";
 import { glowFromSwatch } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -14,7 +14,7 @@ const BADGE_LABEL = { new: "New", bestseller: "Bestseller", sale: "Sale" } as co
  * the card tilts toward the pointer, a glow in the colourway's own colour
  * follows it, and the shoe floats forward on its own depth layer.
  */
-export default function ProductCard({ product, priority = false, className }: { product: Product; priority?: boolean; className?: string }) {
+function ProductCard({ product, priority = false, className }: { product: Product; priority?: boolean; className?: string }) {
   const [active, setActive] = useState(0);
   const colorway = product.colorways[active];
   const glow = glowFromSwatch(colorway.swatch);
@@ -29,10 +29,25 @@ export default function ProductCard({ product, priority = false, className }: { 
   const gy = useTransform(my, (v) => `${v * 100}%`);
   const glowBg = useMotionTemplate`radial-gradient(260px circle at ${gx} ${gy}, hsl(${glow} / 0.38), transparent 65%)`;
 
+  // Tilt and pointer glow only make sense with a real hovering pointer; touch and reduced motion skip them.
+  const reduce = useReducedMotion();
+  const finePointer = useRef<boolean | null>(null);
+  const canTilt = () => {
+    if (reduce) return false;
+    if (finePointer.current === null) {
+      finePointer.current = typeof window.matchMedia === "function" && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    }
+    return finePointer.current;
+  };
+
   const onMove = (e: MouseEvent<HTMLDivElement>) => {
+    if (!canTilt()) return;
     const r = e.currentTarget.getBoundingClientRect();
     mx.set((e.clientX - r.left) / r.width);
     my.set((e.clientY - r.top) / r.height);
+  };
+  const onEnter = () => {
+    if (canTilt()) hovering.set(1);
   };
   const onLeave = () => {
     mx.set(0.5);
@@ -46,7 +61,7 @@ export default function ProductCard({ product, priority = false, className }: { 
     <article className={cn("group/card relative", className)} style={{ perspective: 1100 }}>
       <motion.div
         onMouseMove={onMove}
-        onMouseEnter={() => hovering.set(1)}
+        onMouseEnter={onEnter}
         onMouseLeave={onLeave}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         className="relative aspect-[4/5] overflow-hidden rounded-[28px] border border-white/[0.06] bg-surface edge-light"
@@ -55,7 +70,7 @@ export default function ProductCard({ product, priority = false, className }: { 
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,hsl(0_0%_100%/0.04)_1px,transparent_1px),linear-gradient(to_bottom,hsl(0_0%_100%/0.04)_1px,transparent_1px)] bg-[size:28px_28px] [mask-image:radial-gradient(ellipse_60%_55%_at_50%_50%,#000_40%,transparent_100%)]" />
         {/* Resting light under the shoe, in the colourway's colour */}
         <div
-          className="pointer-events-none absolute inset-x-[12%] top-[22%] h-[56%] rounded-full opacity-60 blur-3xl transition-opacity duration-700 group-hover/card:opacity-90"
+          className="pointer-events-none absolute inset-x-[12%] top-[22%] h-[56%] rounded-full opacity-60 transition-opacity duration-700 group-hover/card:opacity-90"
           style={{ background: `radial-gradient(closest-side, hsl(${glow} / 0.45), transparent)` }}
         />
         {/* Pointer-tracking glow */}
@@ -74,9 +89,9 @@ export default function ProductCard({ product, priority = false, className }: { 
                 alt=""
                 loading={priority ? "eager" : "lazy"}
                 draggable={false}
-                initial={{ opacity: 0, scale: 0.85, rotate: -4, filter: "blur(8px)" }}
-                animate={{ opacity: 1, scale: 1, rotate: -10, filter: "blur(0px)" }}
-                exit={{ opacity: 0, scale: 0.9, filter: "blur(8px)" }}
+                initial={{ opacity: 0, scale: 0.85, rotate: -4 }}
+                animate={{ opacity: 1, scale: 1, rotate: -10 }}
+                exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 200, damping: 22 }}
                 className="w-full object-contain drop-shadow-[0_30px_40px_rgba(0,0,0,0.65)] transition-transform duration-700 ease-out group-hover/card:-translate-y-3 group-hover/card:scale-[1.06] group-hover/card:-rotate-3"
               />
@@ -97,23 +112,24 @@ export default function ProductCard({ product, priority = false, className }: { 
         <FavoriteButton productId={product.id} name={product.name} className="absolute right-3 top-3 z-20" />
 
         {product.colorways.length > 1 && (
-          <div className="absolute bottom-4 left-4 z-20 flex gap-1.5" role="group" aria-label="Colourways">
+          <div className="absolute bottom-3 left-3 z-20 flex gap-1" role="group" aria-label="Colourways">
             {product.colorways.map((c, i) => (
               <button
                 key={c.id}
                 type="button"
                 onMouseEnter={() => setActive(i)}
-                onFocus={() => setActive(i)}
                 onClick={() => setActive(i)}
                 aria-label={c.name}
                 aria-pressed={i === active}
                 className={cn(
-                  "h-5 w-5 rounded-full p-[2px] ring-1 transition-[box-shadow,transform] duration-300 hover:scale-110",
-                  i === active ? "ring-foreground" : "ring-white/15",
+                  "group/sw grid h-6 w-6 place-items-center rounded-full",
                 )}
               >
                 <span
-                  className="block h-full w-full rounded-full"
+                  className={cn(
+                    "block h-5 w-5 rounded-full ring-1 ring-offset-1 ring-offset-surface transition-[box-shadow,transform] duration-300 group-hover/sw:scale-110",
+                    i === active ? "ring-foreground" : "ring-control",
+                  )}
                   style={{ background: `linear-gradient(135deg, ${c.swatch[0]} 50%, ${c.swatch[1]} 50%)` }}
                 />
               </button>
@@ -134,3 +150,5 @@ export default function ProductCard({ product, priority = false, className }: { 
     </article>
   );
 }
+
+export default memo(ProductCard);

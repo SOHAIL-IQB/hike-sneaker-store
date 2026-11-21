@@ -20,7 +20,7 @@ export const HikeMark = ({ className, title }: { className?: string; title?: str
 const Logo = ({ className }: { className?: string }) => (
   <span className={cn("inline-flex items-center gap-2 text-foreground", className)}>
     <HikeMark />
-    <span className="text-[1.65rem] font-black uppercase leading-none tracking-[-0.01em] stretch-condensed">Hike</span>
+    <span className="text-2xl font-black uppercase leading-none tracking-[-0.01em] stretch-condensed">Hike</span>
   </span>
 );
 

@@ -36,7 +36,7 @@ const CountBadge = ({ n }: { n: number }) => (
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.4, opacity: 0 }}
         transition={{ type: "spring", stiffness: 500, damping: 24 }}
-        className="tabular absolute -right-0.5 -top-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-signal px-1 text-[10px] font-bold text-signal-foreground"
+        className="tabular absolute -right-0.5 -top-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-signal px-1 text-[0.6875rem] font-bold text-signal-foreground"
       >
         {n > 9 ? "9+" : n}
       </motion.span>

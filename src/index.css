@@ -39,6 +39,7 @@
     --destructive-foreground: 220 18% 3%;
 
     --border: 222 10% 15%; /* #22252B */
+    --control: 222 8% 42%; /* borders of inputs, chips, toggles: ≥3:1 on every surface (WCAG 1.4.11) */
     --input: 222 10% 22%;
     --ring: 16 100% 56%;
 
@@ -165,11 +166,12 @@
     background-image: linear-gradient(to right, hsl(0 0% 100% / 0.045) 1px, transparent 1px),
       linear-gradient(to bottom, hsl(0 0% 100% / 0.045) 1px, transparent 1px);
     background-size: 64px 64px;
-    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 75%);
   }
 
-  /* Ambient light from the product on show. */
-  .bg-glow {
+  /* Ambient light from the product on show (a soft pool of the current --glow colour).
+     The solid colour utility `bg-glow` comes from Tailwind and is used for dots. */
+  .glow-pool {
     background: radial-gradient(closest-side, hsl(var(--glow) / 0.42), hsl(var(--glow) / 0.12) 45%, transparent 75%);
   }
 

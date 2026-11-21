@@ -1,13 +1,16 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigationType } from "react-router-dom";
 import Lenis from "lenis";
 
 let lenis: Lenis | null = null;
 
-/** Pause smooth scrolling while an overlay owns the page. */
+let locks = 0;
+
+/** Pause smooth scrolling while an overlay owns the page. Counted, so two overlays can't unlock each other. */
 export const lockScroll = (locked: boolean) => {
+  locks = locked ? locks + 1 : Math.max(0, locks - 1);
   if (!lenis) return;
-  if (locked) lenis.stop();
+  if (locks > 0) lenis.stop();
   else lenis.start();
 };
 
@@ -19,7 +22,8 @@ export const scrollToTop = (immediate = true) => {
 
 /** Lenis inertial scrolling, skipped entirely for reduced-motion users. */
 export default function SmoothScroll() {
-  const { pathname, search } = useLocation();
+  const { pathname } = useLocation();
+  const navType = useNavigationType();
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -37,11 +41,10 @@ export default function SmoothScroll() {
     };
   }, []);
 
-  // New page → start at the top. Filter changes on the same page keep position.
+  // New page → start at the top. Back/Forward and filter changes keep their position.
   useEffect(() => {
-    scrollToTop();
-  }, [pathname]);
-  void search;
+    if (navType !== "POP") scrollToTop();
+  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;
 }

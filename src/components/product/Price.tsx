@@ -8,7 +8,7 @@ export default function Price({ product, className }: { product: Product; classN
       <span className={sale ? "text-signal" : undefined}>{formatPrice(product.price)}</span>
       {sale && (
         <>
-          <s className="text-[0.85em] text-muted-foreground">{formatPrice(product.compareAt!)}</s>
+          <s aria-hidden className="text-[0.85em] text-muted-foreground">{formatPrice(product.compareAt!)}</s>
           <span className="sr-only">on sale, was {formatPrice(product.compareAt!)}</span>
         </>
       )}

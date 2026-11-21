@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import * as Accordion from "@radix-ui/react-accordion";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
@@ -8,10 +8,10 @@ import Overlay from "@/components/common/Overlay";
 import FavoriteButton from "@/components/product/FavoriteButton";
 import Price, { discountPercent } from "@/components/product/Price";
 import ProductRail from "@/components/product/ProductRail";
-import { FREE_SHIPPING_FROM, getColorway, getProduct, isOnSale, relatedProducts, type Product } from "@/data/products";
+import { FREE_SHIPPING_FROM, getColorway, getProduct, isOnSale, relatedProducts, styleCode, type Product } from "@/data/products";
 import { useShop } from "@/store/ShopProvider";
 import { useUI } from "@/store/UIProvider";
-import { trackEvent } from "@/lib/analytics";
+import { trackAddToCart, trackEvent } from "@/lib/analytics";
 import { EASE, glowFromSwatch } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import NotFound from "./NotFound";
@@ -25,6 +25,17 @@ const SIZE_CHART = [
   ["11", "10", "45", "29"],
   ["12", "11", "46", "30"],
   ["13", "12", "47.5", "31"],
+];
+
+const KIDS_SIZE_CHART = [
+  ["3.5Y", "3", "35.5", "22.5"],
+  ["4Y", "3.5", "36", "23"],
+  ["4.5Y", "4", "36.5", "23.5"],
+  ["5Y", "4.5", "37.5", "24"],
+  ["5.5Y", "5", "38", "24.5"],
+  ["6Y", "5.5", "38.5", "25"],
+  ["6.5Y", "6", "39", "25.5"],
+  ["7Y", "6.5", "40", "26"],
 ];
 
 const genderLabel = (p: Product) => (p.gender === "unisex" ? "Unisex" : p.gender === "kids" ? "Kids" : p.gender === "men" ? "Men's" : "Women's");
@@ -43,6 +54,13 @@ function ProductView({ product }: { product: Product }) {
   const { openBag } = useUI();
   const [size, setSize] = useState<string | null>(null);
   const [sizeError, setSizeError] = useState(false);
+  const [limitReached, setLimitReached] = useState(false);
+  const sizeGroup = useRef<HTMLDivElement>(null);
+  // A size that is sold out in the current colourway is never treated as chosen.
+  const selected = size && !colorway.soldOut?.includes(size) ? size : null;
+  const isKids = product.sizes.some((s) => s.endsWith("Y"));
+  const sizeChart = isKids ? KIDS_SIZE_CHART : SIZE_CHART;
+  const enabledSizes = product.sizes.filter((s) => !colorway.soldOut?.includes(s));
   const [guideOpen, setGuideOpen] = useState(false);
 
   // GA4: same event and parameters as the first version of the store.
@@ -55,26 +73,48 @@ function ProductView({ product }: { product: Product }) {
     };
   }, [product.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    if (size && colorway.soldOut?.includes(size)) setSize(null);
-  }, [colorway.id]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const pickColor = (cid: string) => {
     const next = new URLSearchParams(params);
     if (cid === product.colorways[0].id) next.delete("color");
     else next.set("color", cid);
     setParams(next, { replace: true, preventScrollReset: true });
+    setLimitReached(false);
+  };
+
+  const pickSize = (s: string) => {
+    setSize(s);
+    setSizeError(false);
+    setLimitReached(false);
+  };
+
+  // Radio-group keyboard behaviour: arrows move between in-stock sizes and select them.
+  const onSizeKeyDown = (e: KeyboardEvent) => {
+    const dir = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
+    if (!dir || enabledSizes.length === 0) return;
+    e.preventDefault();
+    const at = selected ? enabledSizes.indexOf(selected) : -1;
+    const next = enabledSizes[at === -1 ? (dir > 0 ? 0 : enabledSizes.length - 1) : (at + dir + enabledSizes.length) % enabledSizes.length];
+    pickSize(next);
+    Array.from(sizeGroup.current?.querySelectorAll<HTMLButtonElement>('[role="radio"]') ?? [])
+      .find((b) => b.dataset.size === next)
+      ?.focus();
   };
 
   const add = () => {
-    if (!size) {
+    if (!selected) {
       setSizeError(true);
       document.getElementById("size-grid")?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
-    addToBag(product.id, colorway.id, size);
-    trackEvent("add_to_cart", { item_id: product.id, item_name: product.name, price: product.price, size });
-    openBag({ productId: product.id, colorwayId: colorway.id, size });
+    const added = addToBag(product.id, colorway.id, selected);
+    if (!added) {
+      // Already at the per-size limit: nothing changed, so nothing is tracked and the bag stays shut.
+      setLimitReached(true);
+      return;
+    }
+    setLimitReached(false);
+    trackAddToCart(product, selected);
+    openBag({ productId: product.id, colorwayId: colorway.id, size: selected });
   };
 
   // Stage drifts slightly as the page scrolls.
@@ -150,7 +190,7 @@ function ProductView({ product }: { product: Product }) {
                     aria-pressed={c.id === colorway.id}
                     className={cn(
                       "relative aspect-square overflow-hidden rounded-2xl border bg-surface transition-colors",
-                      c.id === colorway.id ? "border-foreground" : "border-white/[0.06] hover:border-white/25",
+                      c.id === colorway.id ? "border-foreground" : "border-control hover:border-foreground/60",
                     )}
                   >
                     <img src={c.image} alt="" className="h-full w-full -rotate-12 object-contain p-2" />
@@ -163,11 +203,11 @@ function ProductView({ product }: { product: Product }) {
           {/* Buy box */}
           <div className="pb-8">
             <motion.div initial={{ opacity: 0, y: 24, filter: "blur(10px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 0.8, ease: EASE }}>
-              <p className="text-sm text-muted-foreground">
+              <h1 className="text-display text-[clamp(2.5rem,5vw,4.25rem)]">{product.name.replace(/^Hike /, "")}</h1>
+              <p className="mt-3 text-muted-foreground">
                 {genderLabel(product)} {product.tagline.toLowerCase()}
               </p>
-              <h1 className="text-display mt-3 text-[clamp(2.5rem,5vw,4.25rem)]">{product.name.replace(/^Hike /, "")}</h1>
-              <Price product={product} className="mt-5 text-2xl font-semibold" />
+              <Price product={product} className="mt-4 text-2xl font-semibold" />
             </motion.div>
 
             <fieldset className="mt-10">
@@ -183,7 +223,7 @@ function ProductView({ product }: { product: Product }) {
                     onClick={() => pickColor(c.id)}
                     aria-pressed={c.id === colorway.id}
                     aria-label={c.name}
-                    className={cn("h-10 w-10 rounded-full p-[3px] ring-1 transition-transform hover:scale-110", c.id === colorway.id ? "ring-foreground" : "ring-white/15")}
+                    className={cn("h-10 w-10 rounded-full p-[3px] ring-1 transition-transform hover:scale-110", c.id === colorway.id ? "ring-foreground" : "ring-control")}
                   >
                     <span className="block h-full w-full rounded-full" style={{ background: `linear-gradient(135deg, ${c.swatch[0]} 50%, ${c.swatch[1]} 50%)` }} />
                   </button>
@@ -191,31 +231,41 @@ function ProductView({ product }: { product: Product }) {
               </div>
             </fieldset>
 
-            <fieldset className="mt-8" id="size-grid">
-              <legend className="mb-3 flex w-full items-center justify-between text-sm">
-                <span className={cn("font-semibold", sizeError && "text-destructive")}>Select size (US)</span>
+            <div className="mt-8" id="size-grid">
+              <div className="mb-3 flex w-full items-center justify-between text-sm">
+                <span className={cn("font-semibold", sizeError && "text-destructive")}>
+                  Select size (US)
+                </span>
                 <button type="button" onClick={() => setGuideOpen(true)} className="inline-flex items-center gap-1.5 text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
                   <Ruler className="h-4 w-4" strokeWidth={1.75} /> Size guide
                 </button>
-              </legend>
-              <div className={cn("grid grid-cols-4 gap-2 rounded-2xl sm:grid-cols-5", sizeError && "ring-1 ring-destructive ring-offset-4 ring-offset-background")}>
+              </div>
+              <div
+                ref={sizeGroup}
+                role="radiogroup"
+                aria-label="Size"
+                aria-required="true"
+                aria-invalid={sizeError || undefined}
+                onKeyDown={onSizeKeyDown}
+                className={cn("grid grid-cols-4 gap-2 rounded-2xl sm:grid-cols-5", sizeError && "ring-1 ring-destructive ring-offset-4 ring-offset-background")}
+              >
                 {product.sizes.map((s) => {
                   const out = colorway.soldOut?.includes(s);
-                  const on = size === s;
+                  const on = selected === s;
                   return (
                     <button
                       key={s}
                       type="button"
+                      role="radio"
+                      data-size={s}
                       disabled={out}
-                      aria-pressed={on}
+                      aria-checked={on}
                       aria-label={out ? `US ${s}, sold out` : `US ${s}`}
-                      onClick={() => {
-                        setSize(s);
-                        setSizeError(false);
-                      }}
+                      tabIndex={s === (selected ?? enabledSizes[0]) ? 0 : -1}
+                      onClick={() => pickSize(s)}
                       className={cn(
                         "tabular relative h-12 rounded-xl border text-sm font-medium transition-[background-color,border-color,color] duration-200",
-                        on ? "border-foreground bg-foreground text-background" : "border-surface-3 hover:border-foreground/60",
+                        on ? "border-foreground bg-foreground text-background" : "border-control hover:border-foreground/60",
                         out && "cursor-not-allowed text-muted-foreground/50 line-through decoration-1",
                       )}
                     >
@@ -229,7 +279,7 @@ function ProductView({ product }: { product: Product }) {
                   Pick a size to add this pair to your bag.
                 </p>
               )}
-            </fieldset>
+            </div>
 
             <div className="mt-8 flex gap-3">
               <Button variant="signal" size="lg" className="flex-1" onClick={add}>
@@ -238,9 +288,13 @@ function ProductView({ product }: { product: Product }) {
               <FavoriteButton productId={product.id} name={product.name} size="lg" className="border-surface-3 bg-transparent" />
             </div>
 
+            <p role="status" className={cn("text-sm text-muted-foreground", limitReached && "mt-4")}>
+              {limitReached ? "You already have the maximum of 10 in this size." : ""}
+            </p>
+
             <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
-                <Truck className="h-4 w-4" strokeWidth={1.75} /> Free delivery on orders over ${FREE_SHIPPING_FROM}
+                <Truck className="h-4 w-4" strokeWidth={1.75} /> Free delivery on orders from ${FREE_SHIPPING_FROM}
               </li>
               <li className="flex items-center gap-2">
                 <RotateCcw className="h-4 w-4" strokeWidth={1.75} /> Free 30-day returns
@@ -278,9 +332,7 @@ function ProductView({ product }: { product: Product }) {
                       ))}
                       <div className="flex justify-between py-2.5">
                         <dt className="text-muted-foreground">Style code</dt>
-                        <dd className="tabular font-medium uppercase">
-                          HK-{product.id.slice(0, 4)}-{colorway.id.slice(0, 3)}
-                        </dd>
+                        <dd className="tabular font-medium">{styleCode(product, colorway)}</dd>
                       </div>
                     </dl>
                   ),
@@ -290,17 +342,19 @@ function ProductView({ product }: { product: Product }) {
                   title: "Delivery & returns",
                   body: (
                     <p className="leading-relaxed">
-                      This is a demo store, so nothing ships. In a real store: standard delivery in 3–5 working days, free over ${FREE_SHIPPING_FROM}, and free returns within 30 days.
+                      This is a demo store, so nothing ships. In a real store: standard delivery in 3–5 working days, free from ${FREE_SHIPPING_FROM}, and free returns within 30 days.
                     </p>
                   ),
                 },
               ].map((item) => (
                 <Accordion.Item key={item.id} value={item.id}>
-                  <Accordion.Header>
-                    <Accordion.Trigger className="group flex w-full items-center justify-between py-5 text-left font-semibold">
-                      {item.title}
-                      <ChevronDown className="h-5 w-5 transition-transform duration-300 group-data-[state=open]:rotate-180" strokeWidth={1.75} />
-                    </Accordion.Trigger>
+                  <Accordion.Header asChild>
+                    <h2>
+                      <Accordion.Trigger className="group flex w-full items-center justify-between py-5 text-left font-semibold">
+                        {item.title}
+                        <ChevronDown className="h-5 w-5 transition-transform duration-300 group-data-[state=open]:rotate-180" strokeWidth={1.75} />
+                      </Accordion.Trigger>
+                    </h2>
                   </Accordion.Header>
                   <Accordion.Content className="overflow-hidden text-sm text-foreground/80 data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
                     <div className="pb-6">{item.body}</div>
@@ -316,7 +370,9 @@ function ProductView({ product }: { product: Product }) {
       <div className="fixed inset-x-3 bottom-3 z-40 flex items-center gap-3 rounded-full border border-white/10 bg-[hsl(222_14%_7%/0.85)] p-2 pl-5 shadow-[0_20px_60px_rgba(0,0,0,0.7)] backdrop-blur-xl lg:hidden">
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold">{product.name}</p>
-          <p className="tabular text-xs text-muted-foreground">{size ? `Size ${size}` : "No size selected"}</p>
+          <div role="status">
+            <p className="tabular text-xs text-muted-foreground">{selected ? `Size ${selected}` : "No size selected"}</p>
+          </div>
         </div>
         <Button variant="signal" onClick={add}>
           Add to bag
@@ -339,18 +395,25 @@ function ProductView({ product }: { product: Product }) {
                     {h}
                   </th>
                 ))}
+                <th scope="col" className="pb-3 text-right">
+                  <span className="sr-only">Your size</span>
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {SIZE_CHART.map((row) => (
-                <tr key={row[0]} className={cn(size === row[0] && "text-signal")}>
-                  {row.map((cell, i) => (
-                    <td key={i} className="py-3">
-                      {cell}
-                    </td>
-                  ))}
-                </tr>
-              ))}
+              {sizeChart.map((row) => {
+                const on = selected === row[0];
+                return (
+                  <tr key={row[0]} className={cn(on && "font-semibold text-signal")}>
+                    {row.map((cell, i) => (
+                      <td key={i} className="py-3">
+                        {cell}
+                      </td>
+                    ))}
+                    <td className="py-3 text-right text-xs">{on ? "Selected" : ""}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

@@ -1,8 +1,8 @@
 import { HikeMark } from "@/components/brand/Logo";
 
-const WORDS = ["Running", "Lifestyle", "Training", "Basketball", "Free delivery over $100", "30-day returns"];
+const WORDS = ["Running", "Lifestyle", "Training", "Basketball", "Free delivery from $100", "30-day returns"];
 
-/** Endless ticker. Pure CSS so it costs nothing; stops for reduced-motion users. */
+/** Endless ticker. Pure CSS so it costs nothing; stops for reduced-motion users and pauses on hover or focus. */
 export default function Marquee() {
   const row = (
     <ul className="flex shrink-0 items-center gap-10 pr-10" aria-hidden>
@@ -17,7 +17,7 @@ export default function Marquee() {
   return (
     <div className="relative overflow-hidden border-y border-border bg-surface/40 py-6">
       <p className="sr-only">{WORDS.join(", ")}</p>
-      <div className="flex w-max animate-[marquee_38s_linear_infinite] motion-reduce:animate-none">
+      <div className="flex w-max animate-[marquee_38s_linear_infinite] hover:[animation-play-state:paused] focus-within:[animation-play-state:paused] motion-reduce:animate-none">
         {row}
         {row}
       </div>

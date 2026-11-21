@@ -52,6 +52,7 @@ export default {
           3: "hsl(var(--surface-3))",
         },
         glow: "hsl(var(--glow))",
+        control: "hsl(var(--control))",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

@@ -25,19 +25,20 @@ export default function BagDrawer() {
 
   return (
     <Overlay open={bagOpen} onOpenChange={(o) => !o && closeBag()} title={`Bag${bagCount ? ` (${bagCount})` : ""}`}>
-      <AnimatePresence>
-        {added && (
-          <motion.p
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: EASE }}
-            className="mx-6 mb-2 flex items-center gap-2 rounded-full bg-success/10 px-4 py-2 text-sm text-success"
-            role="status"
-          >
-            <Check className="h-4 w-4" strokeWidth={2.5} /> {added.name} added — size {justAdded?.size}
-          </motion.p>
-        )}
-      </AnimatePresence>
+      <div role="status" aria-live="polite">
+        <AnimatePresence>
+          {added && (
+            <motion.p
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: EASE }}
+              className="mx-6 mb-2 flex items-center gap-2 rounded-full bg-success/10 px-4 py-2 text-sm text-success"
+            >
+              <Check className="h-4 w-4" strokeWidth={2.5} /> {added.name} added — size {justAdded?.size}
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
 
       {bag.length === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-5 px-8 text-center">
@@ -87,7 +88,7 @@ export default function BagDrawer() {
                   className="flex gap-4 rounded-2xl bg-surface-2/60 p-3"
                 >
                   <Link
-                    to={`/products/${line.productId}?color=${line.colorwayId}`}
+                    to={`/products/${line.productId}?color=${encodeURIComponent(line.colorwayId)}`}
                     onClick={closeBag}
                     className="grid h-24 w-24 shrink-0 place-items-center rounded-xl bg-surface-3/50"
                   >

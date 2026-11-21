@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
@@ -35,8 +35,13 @@ const panelPosition = {
 
 /** Accessible slide-over / drop-down panel: Radix handles focus, Escape and aria; Framer handles motion. */
 export default function Overlay({ open, onOpenChange, title, hideTitle, side = "right", className, children }: OverlayProps) {
+  const opener = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
-    lockScroll(open);
+    if (!open) return;
+    opener.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    lockScroll(true);
+    return () => lockScroll(false);
   }, [open]);
 
   return (
@@ -53,7 +58,16 @@ export default function Overlay({ open, onOpenChange, title, hideTitle, side = "
                 transition={{ duration: 0.4, ease: EASE }}
               />
             </Dialog.Overlay>
-            <Dialog.Content asChild forceMount aria-describedby={undefined}>
+            <Dialog.Content
+              asChild
+              forceMount
+              aria-describedby={undefined}
+              onCloseAutoFocus={(e) => {
+                // These dialogs have no Radix trigger, so hand focus back to whatever opened them.
+                e.preventDefault();
+                if (opener.current?.isConnected) opener.current.focus();
+              }}
+            >
               <motion.div
                 {...panelMotion[side]}
                 transition={{ duration: 0.6, ease: EASE }}

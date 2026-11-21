@@ -1,5 +1,5 @@
 import { useRef, type ReactNode } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Product } from "@/data/products";
 import { inView, rise } from "@/lib/motion";
@@ -8,9 +8,10 @@ import ProductCard from "./ProductCard";
 /** Horizontal, snap-scrolling product rail with arrow controls. */
 export default function ProductRail({ title, products, action }: { title: string; products: Product[]; action?: ReactNode }) {
   const ref = useRef<HTMLUListElement>(null);
-  const scroll = (dir: 1 | -1) => ref.current?.scrollBy({ left: dir * ref.current.clientWidth * 0.8, behavior: "smooth" });
+  const reduce = useReducedMotion();
+  const scroll = (dir: 1 | -1) => ref.current?.scrollBy({ left: dir * ref.current.clientWidth * 0.8, behavior: reduce ? "auto" : "smooth" });
   const arrow =
-    "grid h-11 w-11 place-items-center rounded-full border border-surface-3 text-foreground/80 transition-colors hover:border-foreground/50 hover:text-foreground";
+    "grid h-11 w-11 place-items-center rounded-full border border-control text-foreground/80 transition-colors hover:border-foreground/50 hover:text-foreground";
 
   return (
     <motion.section variants={rise} initial="hidden" whileInView="show" viewport={inView} aria-label={title}>
@@ -27,8 +28,9 @@ export default function ProductRail({ title, products, action }: { title: string
         </div>
       </div>
       <ul
+        role="list"
         ref={ref}
-        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-5 pb-4 md:gap-5 md:px-8 lg:px-[max(3rem,calc((100vw_-_1440px)/2_+_3rem))]"
+        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto motion-safe:scroll-smooth px-5 pb-4 md:gap-5 md:px-8 lg:px-[max(3rem,calc((100vw_-_1440px)/2_+_3rem))]"
         data-lenis-prevent-wheel
       >
         {products.map((p) => (

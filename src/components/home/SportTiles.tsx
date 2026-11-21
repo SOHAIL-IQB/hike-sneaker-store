@@ -23,7 +23,7 @@ export default function SportTiles() {
         initial="hidden"
         whileInView="show"
         viewport={inView}
-        className="grid gap-4 md:grid-cols-6 md:grid-rows-[repeat(2,minmax(16rem,1fr))]"
+        className="grid gap-4 md:grid-cols-6 md:grid-rows-[repeat(2,minmax(20rem,1fr))]"
       >
         {CATEGORIES.map((c, i) => {
           const p = lead(c.id);
@@ -37,10 +37,10 @@ export default function SportTiles() {
             >
               <Link
                 to={`/products?category=${c.id}`}
-                className="group relative flex h-full min-h-[16rem] overflow-hidden rounded-[28px] border border-white/[0.06] bg-surface p-6 edge-light md:p-8"
+                className="group relative flex h-full min-h-[18rem] overflow-hidden rounded-[28px] border border-white/[0.06] bg-surface p-6 edge-light md:p-8"
                 style={{ ["--glow" as string]: glow }}
               >
-                <div className="pointer-events-none absolute -right-[10%] top-1/2 h-[120%] w-[70%] -translate-y-1/2 rounded-full bg-glow opacity-20 blur-[80px] transition-opacity duration-700 group-hover:opacity-40" />
+                <div className="pointer-events-none absolute -right-[10%] top-1/2 h-[120%] w-[70%] -translate-y-1/2 rounded-full glow-pool opacity-60 transition-opacity duration-700 group-hover:opacity-100" />
                 <div className="relative z-10 flex flex-col justify-between">
                   <div>
                     <h3 className="text-display text-[clamp(1.75rem,3.2vw,3rem)]">{c.label}</h3>
@@ -57,10 +57,8 @@ export default function SportTiles() {
                   src={p.colorways[0].image}
                   alt=""
                   loading="lazy"
-                  className={cn(
-                    "pointer-events-none absolute -bottom-[6%] -right-[4%] max-w-[420px] -rotate-[14deg] object-contain drop-shadow-[0_30px_40px_rgba(0,0,0,0.6)] transition-transform duration-[900ms] ease-out group-hover:-translate-y-4 group-hover:-rotate-[20deg] group-hover:scale-105",
-                    i === 0 ? "w-[62%]" : "w-[50%] md:w-[44%]",
-                  )}
+                  decoding="async"
+                  className="pointer-events-none absolute bottom-[7%] right-[4%] h-[84%] w-auto max-w-[56%] -rotate-[6deg] object-contain object-right-bottom drop-shadow-[0_30px_40px_rgba(0,0,0,0.6)] transition-transform duration-[900ms] ease-out group-hover:-translate-y-3 group-hover:-rotate-[10deg] group-hover:scale-[1.04] motion-reduce:transition-none"
                 />
               </Link>
             </motion.li>

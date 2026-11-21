@@ -35,7 +35,7 @@ export type ShopAction =
   | { type: "viewed"; productId: string }
   | { type: "replace"; state: ShopState };
 
-const clampQty = (n: number) => Math.max(0, Math.min(MAX_QTY, Math.floor(n)));
+const clampQty = (n: number) => (Number.isFinite(n) ? Math.max(0, Math.min(MAX_QTY, Math.floor(n))) : 0);
 
 export function shopReducer(state: ShopState, action: ShopAction): ShopState {
   switch (action.type) {
@@ -105,23 +105,32 @@ export function shopReducer(state: ShopState, action: ShopAction): ShopState {
   }
 }
 
-/** Accept only well-formed saved state; anything else starts fresh. */
-export function reviveState(raw: unknown, knownProductIds: Set<string>): ShopState {
+export const MAX_LINES = 50;
+
+/** Optional catalogue check so saved lines can't carry unknown colourways, sizes or sold-out pairs. */
+export type LineValidator = (productId: string, colorwayId: string, size: string) => boolean;
+
+/** Accept only well-formed saved state; anything else starts fresh. Builds each line from validated fields only. */
+export function reviveState(raw: unknown, knownProductIds: Set<string>, isValidLine?: LineValidator): ShopState {
   if (!raw || typeof raw !== "object") return initialState;
   const r = raw as Partial<ShopState>;
   const ids = (v: unknown) =>
-    Array.isArray(v) ? v.filter((x): x is string => typeof x === "string" && knownProductIds.has(x)) : [];
-  const bag = Array.isArray(r.bag)
-    ? r.bag.filter(
-        (l): l is BagLine =>
-          !!l &&
-          typeof l.productId === "string" &&
-          knownProductIds.has(l.productId) &&
-          typeof l.colorwayId === "string" &&
-          typeof l.size === "string" &&
-          Number.isFinite(l.quantity) &&
-          l.quantity > 0,
-      ).map((l) => ({ ...l, key: lineKey(l.productId, l.colorwayId, l.size), quantity: clampQty(l.quantity) }))
-    : [];
-  return { bag, favorites: ids(r.favorites), recent: ids(r.recent).slice(0, MAX_RECENT) };
+    Array.isArray(v) ? [...new Set(v.filter((x): x is string => typeof x === "string" && knownProductIds.has(x)))] : [];
+
+  const merged = new Map<string, BagLine>();
+  if (Array.isArray(r.bag)) {
+    for (const l of r.bag as Partial<BagLine>[]) {
+      if (!l || typeof l.productId !== "string" || typeof l.colorwayId !== "string" || typeof l.size !== "string") continue;
+      if (!knownProductIds.has(l.productId) || typeof l.quantity !== "number" || !Number.isFinite(l.quantity)) continue;
+      if (isValidLine && !isValidLine(l.productId, l.colorwayId, l.size)) continue;
+      const quantity = clampQty(l.quantity);
+      if (quantity <= 0) continue;
+      const key = lineKey(l.productId, l.colorwayId, l.size);
+      const existing = merged.get(key);
+      if (existing) existing.quantity = clampQty(existing.quantity + quantity);
+      else merged.set(key, { key, productId: l.productId, colorwayId: l.colorwayId, size: l.size, quantity });
+      if (merged.size >= MAX_LINES) break;
+    }
+  }
+  return { bag: [...merged.values()], favorites: ids(r.favorites), recent: ids(r.recent).slice(0, MAX_RECENT) };
 }

@@ -60,8 +60,8 @@ export default function Footer() {
             <p className="text-label text-muted-foreground">Project</p>
             <ul className="space-y-2.5">
               <li>
-                <a href="https://github.com/SOHAIL-IQB/hike-sneaker-store" target="_blank" rel="noreferrer" className={`${link} inline-flex items-center gap-1.5`}>
-                  <Github className="h-4 w-4" strokeWidth={1.75} /> Source on GitHub <ArrowUpRight className="h-3.5 w-3.5" />
+                <a href="https://github.com/SOHAIL-IQB/hike-sneaker-store" target="_blank" rel="noopener noreferrer" className={`${link} inline-flex items-center gap-1.5`}>
+                  <Github className="h-4 w-4" strokeWidth={1.75} /> Source on GitHub <ArrowUpRight className="h-3.5 w-3.5" aria-hidden /><span className="sr-only"> (opens in a new tab)</span>
                 </a>
               </li>
             </ul>

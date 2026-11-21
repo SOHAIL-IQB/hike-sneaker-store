@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
@@ -27,8 +27,8 @@ const SORTS: { id: SortKey; label: string }[] = [
 
 const PRICES = [
   { id: "", label: "Any price" },
-  { id: "100", label: "Under $100" },
-  { id: "150", label: "Under $150" },
+  { id: "100", label: "Up to $100" },
+  { id: "150", label: "Up to $150" },
 ];
 
 const ALL_SIZES = Array.from(new Set(products.flatMap((p) => p.sizes))).sort((a, b) => {
@@ -37,17 +37,37 @@ const ALL_SIZES = Array.from(new Set(products.flatMap((p) => p.sizes))).sort((a,
   return parseFloat(a) - parseFloat(b);
 });
 
+const DESKTOP_QUERY = "(min-width: 1024px)";
+
+/** Tracks whether the viewport is wide enough for the inline filter sidebar. */
+function useIsDesktop() {
+  const [matches, setMatches] = useState(() => typeof window !== "undefined" && !!window.matchMedia?.(DESKTOP_QUERY).matches);
+  useEffect(() => {
+    const mq = window.matchMedia?.(DESKTOP_QUERY);
+    if (!mq) return;
+    const onChange = () => setMatches(mq.matches);
+    onChange();
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, []);
+  return matches;
+}
+
 function useFilters() {
   const [params, setParams] = useSearchParams();
   const list = (k: string) => params.get(k)?.split(",").filter(Boolean) ?? [];
+  // URL params are user input: anything unrecognised falls back to the default.
+  const categoryParam = params.get("category");
+  const sortParam = params.get("sort");
+  const priceParam = Number(params.get("price"));
   const state = {
-    category: (params.get("category") as Category | null) ?? null,
-    genders: list("gender") as Gender[],
+    category: CATEGORIES.find((c) => c.id === categoryParam)?.id ?? null,
+    genders: list("gender").filter((g): g is Gender => GENDERS.some((x) => x.id === g)),
     sizes: list("size"),
-    maxPrice: params.get("price") ? Number(params.get("price")) : null,
+    maxPrice: params.get("price") && Number.isFinite(priceParam) && priceParam > 0 ? priceParam : null,
     sale: params.get("sale") === "1",
     query: params.get("q") ?? "",
-    sort: (params.get("sort") as SortKey) ?? "featured",
+    sort: SORTS.find((s) => s.id === sortParam)?.id ?? "featured",
   };
   const set = (key: string, value: string | string[] | null) => {
     const next = new URLSearchParams(params);
@@ -66,8 +86,9 @@ function useFilters() {
     if (state.query) next.set("q", state.query);
     setParams(next, { replace: true, preventScrollReset: true });
   };
+  const clearAll = () => setParams(new URLSearchParams(), { replace: true, preventScrollReset: true });
   const activeCount = state.genders.length + state.sizes.length + (state.maxPrice ? 1 : 0) + (state.sale ? 1 : 0);
-  return { state, set, toggleIn, clear, activeCount };
+  return { state, set, toggleIn, clear, clearAll, activeCount };
 }
 
 type FiltersApi = ReturnType<typeof useFilters>;
@@ -77,7 +98,7 @@ function FilterPanel({ f }: { f: FiltersApi }) {
   const chip = (on: boolean) =>
     cn(
       "rounded-full border px-4 py-2 text-sm transition-colors",
-      on ? "border-foreground bg-foreground text-background" : "border-surface-3 text-foreground/80 hover:border-foreground/50",
+      on ? "border-foreground bg-foreground text-background" : "border-control text-foreground/80 hover:border-foreground/50",
     );
   return (
     <div className="space-y-8">
@@ -105,7 +126,7 @@ function FilterPanel({ f }: { f: FiltersApi }) {
                 onClick={() => toggleIn("size", s)}
                 className={cn(
                   "tabular h-10 rounded-xl border text-sm transition-colors",
-                  on ? "border-foreground bg-foreground text-background" : "border-surface-3 hover:border-foreground/50",
+                  on ? "border-foreground bg-foreground text-background" : "border-control hover:border-foreground/50",
                 )}
               >
                 {s}
@@ -133,7 +154,7 @@ function FilterPanel({ f }: { f: FiltersApi }) {
         <span className="font-medium">On sale</span>
         <span className="relative">
           <input type="checkbox" className="peer sr-only" checked={state.sale} onChange={(e) => set("sale", e.target.checked ? "1" : null)} />
-          <span className="block h-7 w-12 rounded-full bg-surface-3 transition-colors peer-checked:bg-signal peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-signal" />
+          <span className="block h-7 w-12 rounded-full bg-control transition-colors peer-checked:bg-signal peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-signal" />
           <span className="absolute left-1 top-1 h-5 w-5 rounded-full bg-foreground transition-transform duration-300 ease-out peer-checked:translate-x-5" />
         </span>
       </label>
@@ -152,6 +173,7 @@ export default function Products() {
   const { state, set } = f;
   const [showFilters, setShowFilters] = useState(true);
   const [mobileFilters, setMobileFilters] = useState(false);
+  const isDesktop = useIsDesktop();
 
   const list = useMemo(() => sortProducts(filterProducts(products, state), state.sort), [state.category, state.genders.join(), state.sizes.join(), state.maxPrice, state.sale, state.query, state.sort]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -200,20 +222,24 @@ export default function Products() {
           <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
-              onClick={() => (window.matchMedia("(min-width: 1024px)").matches ? setShowFilters((s) => !s) : setMobileFilters(true))}
+              onClick={() => (isDesktop ? setShowFilters((s) => !s) : setMobileFilters(true))}
               className="flex h-11 items-center gap-2 rounded-full border border-white/[0.08] bg-[hsl(222_14%_7%/0.75)] px-4 text-sm font-medium backdrop-blur-xl hover:bg-surface-2"
-              aria-expanded={showFilters}
+              aria-label={f.activeCount > 0 ? `Filters, ${f.activeCount} active` : "Filters"}
+              aria-haspopup={isDesktop ? undefined : "dialog"}
+              aria-expanded={isDesktop ? showFilters : mobileFilters}
             >
               <SlidersHorizontal className="h-4 w-4" strokeWidth={1.75} />
-              <span className="hidden sm:inline">{showFilters ? "Hide filters" : "Filters"}</span>
-              {f.activeCount > 0 && <span className="tabular grid h-5 min-w-5 place-items-center rounded-full bg-signal px-1 text-[11px] font-bold text-signal-foreground">{f.activeCount}</span>}
+              <span aria-hidden className="hidden sm:inline">
+                {isDesktop && showFilters ? "Hide filters" : "Filters"}
+              </span>
+              {f.activeCount > 0 && <span aria-hidden className="tabular grid h-5 min-w-5 place-items-center rounded-full bg-signal px-1 text-[11px] font-bold text-signal-foreground">{f.activeCount}</span>}
             </button>
             <label className="relative hidden sm:block">
               <span className="sr-only">Sort by</span>
               <select
                 value={state.sort}
                 onChange={(e) => set("sort", e.target.value === "featured" ? null : e.target.value)}
-                className="h-11 appearance-none rounded-full border border-white/[0.08] bg-[hsl(222_14%_7%/0.75)] pl-4 pr-10 text-sm font-medium backdrop-blur-xl hover:bg-surface-2 focus:outline-none focus-visible:border-signal"
+                className="h-11 appearance-none rounded-full border border-control bg-[hsl(222_14%_7%/0.75)] pl-4 pr-10 text-sm font-medium backdrop-blur-xl hover:bg-surface-2"
               >
                 {SORTS.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -246,14 +272,22 @@ export default function Products() {
           )}
         </AnimatePresence>
 
-        <section className="min-w-0 flex-1" aria-live="polite" aria-label="Products">
+        <section className="min-w-0 flex-1" aria-label="Products">
+          <p role="status" className="sr-only">
+            {list.length === 0 ? "No products match" : `${list.length} ${list.length === 1 ? "product" : "products"}`}
+          </p>
           {list.length === 0 ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-start gap-5 rounded-[28px] border border-dashed border-surface-3 p-10">
               <p className="text-display text-3xl">No matches</p>
               <p className="max-w-[46ch] text-muted-foreground">Nothing fits every filter you picked. Remove a size or price limit to see more.</p>
-              <Button variant="outline" onClick={f.clear}>
-                Clear filters
-              </Button>
+              <div className="flex flex-wrap gap-3">
+                <Button variant="outline" onClick={f.clear}>
+                  Clear filters
+                </Button>
+                <Button variant="ghost" size="sm" onClick={f.clearAll}>
+                  Clear all
+                </Button>
+              </div>
             </motion.div>
           ) : (
             <motion.ul layout className={cn("grid grid-cols-1 gap-x-5 gap-y-12 sm:grid-cols-2", showFilters ? "xl:grid-cols-3" : "lg:grid-cols-3 xl:grid-cols-4")}>
@@ -283,7 +317,7 @@ export default function Products() {
             <select
               value={state.sort}
               onChange={(e) => set("sort", e.target.value === "featured" ? null : e.target.value)}
-              className="h-12 w-full appearance-none rounded-full border border-surface-3 bg-surface-2 px-5 text-sm font-medium"
+              className="h-12 w-full appearance-none rounded-full border border-control bg-surface-2 px-5 text-sm font-medium"
             >
               {SORTS.map((s) => (
                 <option key={s.id} value={s.id}>
