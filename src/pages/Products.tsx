@@ -167,7 +167,7 @@ export default function Products() {
       <header className="container max-w-[1440px]">
         <motion.div initial={{ opacity: 0, y: 20, filter: "blur(10px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 0.8, ease: EASE }}>
           <p className="text-sm text-muted-foreground">{subtitle}</p>
-          <h1 className="text-display mt-3 text-[clamp(2.75rem,8vw,6rem)]">
+          <h1 className="text-display mt-3 text-[clamp(2rem,9vw,6rem)]">
             {title}
             <span className="tabular ml-3 align-top text-[0.3em] text-muted-foreground">{list.length}</span>
           </h1>
@@ -236,7 +236,7 @@ export default function Products() {
               animate={{ width: 256, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
               transition={{ duration: 0.5, ease: EASE }}
-              className="hidden shrink-0 overflow-hidden lg:block"
+              className="hidden shrink-0 overflow-clip lg:block"
               aria-label="Filters"
             >
               <div className="sticky top-[168px] w-64 pb-10">

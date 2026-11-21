@@ -12,7 +12,7 @@ export default function Favorites() {
 
   return (
     <main id="main" className="container max-w-[1440px] pb-10 pt-32 md:pt-40">
-      <h1 className="text-display text-[clamp(2.5rem,7vw,5.5rem)]">Favourites</h1>
+      <h1 className="text-display text-[clamp(2rem,9vw,5.5rem)]">Favourites</h1>
       <p className="mt-3 text-muted-foreground">{list.length ? `${list.length} saved ${list.length === 1 ? "pair" : "pairs"}` : "Nothing saved yet."}</p>
 
       {list.length === 0 ? (

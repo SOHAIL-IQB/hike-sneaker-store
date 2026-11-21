@@ -1,0 +1,461 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-21T12:58:35.689438+00:00",
+  "title": "Design System: Hike",
+  "extensions": {
+    "colorMeta": {
+      "stage-black": {
+        "role": "neutral",
+        "displayName": "Stage Black",
+        "canonical": "hsl(220 18% 3%)",
+        "tonalRamp": [
+          "#1F232D",
+          "#33394C",
+          "#464F6D",
+          "#57658E",
+          "#7B87AD",
+          "#A2AAC3",
+          "#C9CDDA",
+          "#F0F1F4"
+        ]
+      },
+      "steel-surface": {
+        "role": "neutral",
+        "displayName": "Steel Surface",
+        "canonical": "hsl(222 14% 7%)",
+        "tonalRamp": [
+          "#21242B",
+          "#373C49",
+          "#4B5367",
+          "#5F6A87",
+          "#828CA6",
+          "#A7AEBE",
+          "#CBCED7",
+          "#F1F2F4"
+        ]
+      },
+      "steel-raised": {
+        "role": "neutral",
+        "displayName": "Steel Raised",
+        "canonical": "hsl(222 12% 11%)",
+        "tonalRamp": [
+          "#22252B",
+          "#383D48",
+          "#4D5566",
+          "#616D84",
+          "#848FA4",
+          "#A8AFBD",
+          "#CCCFD6",
+          "#F1F2F4"
+        ]
+      },
+      "steel-high": {
+        "role": "neutral",
+        "displayName": "Steel High",
+        "canonical": "hsl(222 10% 16%)",
+        "tonalRamp": [
+          "#23252A",
+          "#3A3D46",
+          "#505563",
+          "#656D80",
+          "#888FA0",
+          "#ABAFBA",
+          "#CDCFD5",
+          "#F1F2F3"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "hsl(222 10% 15%)",
+        "tonalRamp": [
+          "#232529",
+          "#3A3E46",
+          "#505662",
+          "#666E80",
+          "#8890A0",
+          "#ABB0BA",
+          "#CDD0D5",
+          "#F1F2F3"
+        ]
+      },
+      "field-stroke": {
+        "role": "neutral",
+        "displayName": "Field Stroke",
+        "canonical": "hsl(222 10% 22%)",
+        "tonalRamp": [
+          "#232529",
+          "#3A3E45",
+          "#515662",
+          "#676F7F",
+          "#89909F",
+          "#ACB0B9",
+          "#CDD0D5",
+          "#F1F2F3"
+        ]
+      },
+      "chalk": {
+        "role": "neutral",
+        "displayName": "Chalk",
+        "canonical": "hsl(220 14% 96%)",
+        "tonalRamp": [
+          "#21242B",
+          "#363B49",
+          "#4B5268",
+          "#5F6987",
+          "#828BA6",
+          "#A7ADBE",
+          "#CBCED7",
+          "#F1F2F4"
+        ]
+      },
+      "fog": {
+        "role": "neutral",
+        "displayName": "Fog",
+        "canonical": "hsl(220 6% 60%)",
+        "tonalRamp": [
+          "#252628",
+          "#3D3F43",
+          "#55585E",
+          "#6C7179",
+          "#8E929A",
+          "#AFB1B6",
+          "#CFD0D3",
+          "#F2F2F3"
+        ]
+      },
+      "ember": {
+        "role": "primary",
+        "displayName": "Ember",
+        "canonical": "hsl(16 100% 56%)",
+        "tonalRamp": [
+          "#42190B",
+          "#73280D",
+          "#A8340B",
+          "#E13F05",
+          "#F86430",
+          "#F39472",
+          "#F3C1AF",
+          "#FAEEEA"
+        ]
+      },
+      "ember-ink": {
+        "role": "primary",
+        "displayName": "Ember Ink",
+        "canonical": "hsl(16 100% 62%)",
+        "tonalRamp": [
+          "#42190B",
+          "#73280D",
+          "#A8350B",
+          "#E14005",
+          "#F86530",
+          "#F39572",
+          "#F3C1AF",
+          "#FAEEEA"
+        ]
+      },
+      "steel-glow": {
+        "role": "secondary",
+        "displayName": "Steel Glow (neutral colourway light)",
+        "canonical": "hsl(215 30% 62%)",
+        "tonalRamp": [
+          "#1E252E",
+          "#313D4F",
+          "#425571",
+          "#526D94",
+          "#768FB2",
+          "#9FAFC6",
+          "#C7CFDB",
+          "#F0F2F5"
+        ]
+      },
+      "go-green": {
+        "role": "tertiary",
+        "displayName": "Go Green",
+        "canonical": "hsl(152 60% 52%)",
+        "tonalRamp": [
+          "#163727",
+          "#215E42",
+          "#2A885C",
+          "#31B577",
+          "#58D098",
+          "#8CD9B5",
+          "#BDE6D2",
+          "#EDF7F3"
+        ]
+      },
+      "alarm-red": {
+        "role": "tertiary",
+        "displayName": "Alarm Red",
+        "canonical": "hsl(0 84% 64%)",
+        "tonalRamp": [
+          "#3D0F0F",
+          "#6A1515",
+          "#9B1818",
+          "#CF1717",
+          "#E84040",
+          "#E87D7D",
+          "#EEB5B5",
+          "#F9EBEB"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero product name and page titles; expanded, extra-bold, upper case, balanced wrap."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Home section titles; same setting as Display, smaller clamp."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Product names on cards, menu and bag rows."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Descriptions and supporting copy; secondary copy 0.875rem in Fog."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Filter legends, footer heads, spec terms, table headers, badges. Never decorative kickers."
+      }
+    },
+    "runtimeTokens": [
+      {
+        "name": "--glow",
+        "value": "16 100% 56% (default)",
+        "purpose": "Ambient light, re-tinted per colourway via glowFromSwatch(): most saturated swatch, saturation floored at 55%, lightness clamped 45-62%; near-neutral swatches fall back to 215 30% 62%."
+      }
+    ],
+    "shadows": [
+      {
+        "name": "edge-light",
+        "value": "inset 0 1px 0 0 hsl(0 0% 100% / 0.07), 0 24px 60px -24px hsl(0 0% 0% / 0.8)",
+        "purpose": "Product cards and raised panels."
+      },
+      {
+        "name": "island",
+        "value": "0 20px 60px -20px rgba(0,0,0,0.8)",
+        "purpose": "Header island when scrolled (with 24px backdrop blur)."
+      },
+      {
+        "name": "mega-panel",
+        "value": "0 40px 80px -30px rgba(0,0,0,0.9)",
+        "purpose": "Mega menu and large overlays."
+      },
+      {
+        "name": "product-float",
+        "value": "drop-shadow(0 30px 40px rgba(0,0,0,0.65))",
+        "purpose": "Every shoe cut-out."
+      },
+      {
+        "name": "glow-hover",
+        "value": "0 0 40px -6px hsl(var(--glow) / 0.7)",
+        "purpose": "Primary button hover."
+      },
+      {
+        "name": "signal-hover",
+        "value": "0 0 44px -4px hsl(var(--signal) / 0.75)",
+        "purpose": "Signal button hover."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The single site easing (EASE in src/lib/motion.ts, --ease-out in CSS)."
+      },
+      {
+        "name": "rise",
+        "value": "opacity 0, y 28px, blur 10px to sharp over 0.9s; once at 12% in view",
+        "purpose": "Every section entrance."
+      },
+      {
+        "name": "stagger",
+        "value": "80ms between children",
+        "purpose": "Grouped entrances."
+      },
+      {
+        "name": "spring",
+        "value": "stiffness 260, damping 30, mass 0.9",
+        "purpose": "Layout transitions, pill indicators."
+      },
+      {
+        "name": "soft-spring",
+        "value": "stiffness 120, damping 22",
+        "purpose": "Slow follow motion such as parallax."
+      },
+      {
+        "name": "card-tilt",
+        "value": "spring stiffness 220, damping 22; up to 7deg X / 9deg Y",
+        "purpose": "Product card pointer tilt."
+      },
+      {
+        "name": "colourway-swap",
+        "value": "spring stiffness 200, damping 22; blur 8px out and in",
+        "purpose": "Shoe image changes."
+      },
+      {
+        "name": "orbit",
+        "value": "40s and 60s linear rotations",
+        "purpose": "Hero orbit rings."
+      },
+      {
+        "name": "button",
+        "value": "300ms ease-out; press scale 0.97",
+        "purpose": "Button state changes."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animations and transitions 0.01ms; Lenis off; loops stopped",
+        "purpose": "prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      },
+      {
+        "name": "container-max",
+        "value": "1440px"
+      }
+    ],
+    "provenance": {
+      "productImagery": "src/assets/products/*.webp: two original logo-free AI-generated renders (air-runner--black-ember, flex-motion--ember); 28 colourways derived from them by scripts/recolor-colorways.ts (two-tone per-region recolour).",
+      "adaptedComponents": [
+        "21st.dev Spatial Product Showcase (daiwiikharihar) -> src/components/home/HeroShowcase.tsx",
+        "21st.dev Product Card, 3D tilt + glow (ravikatiyar162) -> src/components/product/ProductCard.tsx"
+      ],
+      "font": "Archivo Variable (wdth 62-125, wght 100-900), self-hosted via @fontsource-variable/archivo/wdth.css"
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Light pill for main navigation actions; glows in the current colourway light on hover.",
+      "html": "<button class=\"ds-btn-primary\">Shop all</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 24px;border:0;border-radius:9999px;background:hsl(var(--foreground,220 14% 96%));color:hsl(var(--background,220 18% 3%));font-family:'Archivo Variable',system-ui,sans-serif;font-weight:600;font-size:0.95rem;letter-spacing:-0.01em;cursor:pointer;transition:background-color .3s cubic-bezier(.16,1,.3,1),box-shadow .3s cubic-bezier(.16,1,.3,1),transform .3s cubic-bezier(.16,1,.3,1)}.ds-btn-primary:hover{background:#fff;box-shadow:0 0 40px -6px hsl(var(--glow,16 100% 56%) / .7)}.ds-btn-primary:active{transform:scale(.97)}.ds-btn-primary:focus-visible{outline:2px solid hsl(var(--ring,16 100% 56%));outline-offset:3px}"
+    },
+    {
+      "name": "Signal Button",
+      "kind": "button",
+      "refersTo": "button-signal",
+      "description": "Ember pill for the single commit action per view: Add to bag, Checkout, Place order.",
+      "html": "<button class=\"ds-btn-signal\">Add to bag</button>",
+      "css": ".ds-btn-signal{display:inline-flex;align-items:center;justify-content:center;height:56px;padding:0 32px;border:0;border-radius:9999px;background:hsl(var(--signal,16 100% 56%));color:hsl(var(--signal-foreground,220 18% 3%));font-family:'Archivo Variable',system-ui,sans-serif;font-weight:600;font-size:1rem;letter-spacing:-0.01em;cursor:pointer;transition:box-shadow .3s cubic-bezier(.16,1,.3,1),filter .3s,transform .3s cubic-bezier(.16,1,.3,1)}.ds-btn-signal:hover{box-shadow:0 0 44px -4px hsl(var(--signal,16 100% 56%) / .75);filter:brightness(1.1)}.ds-btn-signal:active{transform:scale(.97)}.ds-btn-signal:focus-visible{outline:2px solid hsl(var(--ring,16 100% 56%));outline-offset:3px}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary pill with a steel stroke.",
+      "html": "<button class=\"ds-btn-outline\">View details</button>",
+      "css": ".ds-btn-outline{display:inline-flex;align-items:center;height:48px;padding:0 24px;border:1px solid hsl(var(--surface-3,222 10% 16%));border-radius:9999px;background:transparent;color:hsl(var(--foreground,220 14% 96%));font-family:'Archivo Variable',system-ui,sans-serif;font-weight:600;font-size:0.95rem;cursor:pointer;transition:background-color .3s cubic-bezier(.16,1,.3,1),border-color .3s cubic-bezier(.16,1,.3,1),transform .3s}.ds-btn-outline:hover{border-color:hsl(var(--foreground,220 14% 96%) / .6);background:hsl(var(--surface-2,222 12% 11%))}.ds-btn-outline:active{transform:scale(.97)}.ds-btn-outline:focus-visible{outline:2px solid hsl(var(--ring,16 100% 56%));outline-offset:3px}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Checkout field: 56px steel fill, label above, ember stroke on focus.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Email</span><input class=\"ds-input\" type=\"email\" placeholder=\"you@example.com\"></label>",
+      "css": ".ds-field{display:block;font-family:'Archivo Variable',system-ui,sans-serif;color:hsl(var(--foreground,220 14% 96%))}.ds-field-label{display:block;margin-bottom:8px;font-size:.875rem;font-weight:500}.ds-input{width:100%;height:56px;padding:0 20px;border:1px solid hsl(var(--surface-3,222 10% 16%));border-radius:16px;background:hsl(var(--surface,222 14% 7%));color:inherit;font:inherit;outline:none;transition:border-color .3s cubic-bezier(.16,1,.3,1)}.ds-input::placeholder{color:hsl(var(--muted-foreground,220 6% 60%))}.ds-input:focus{border-color:hsl(var(--signal,16 100% 56%))}"
+    },
+    {
+      "name": "Header Island",
+      "kind": "nav",
+      "refersTo": "header-island",
+      "description": "Floating pill header with a translucent indicator on the active item.",
+      "html": "<nav class=\"ds-island\"><span class=\"ds-island-logo\">HIKE</span><ul class=\"ds-island-nav\"><li><a class=\"ds-island-item is-active\" href=\"#\">Running</a></li><li><a class=\"ds-island-item\" href=\"#\">Lifestyle</a></li><li><a class=\"ds-island-item\" href=\"#\">Training</a></li></ul><button class=\"ds-island-icon\" aria-label=\"Bag\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z\"/><path d=\"M3 6h18\"/><path d=\"M16 10a4 4 0 0 1-8 0\"/></svg></button></nav>",
+      "css": ".ds-island{display:flex;align-items:center;justify-content:space-between;gap:16px;height:60px;padding:0 12px 0 20px;border:1px solid rgba(255,255,255,.08);border-radius:9999px;background:hsl(222 14% 7% / .72);backdrop-filter:blur(24px) saturate(1.5);box-shadow:0 20px 60px -20px rgba(0,0,0,.8);font-family:'Archivo Variable',system-ui,sans-serif;color:hsl(var(--foreground,220 14% 96%))}.ds-island-logo{font-weight:800;font-stretch:125%;letter-spacing:-.02em}.ds-island-nav{display:flex;gap:4px;margin:0;padding:0;list-style:none}.ds-island-item{display:block;padding:8px 16px;border-radius:9999px;color:hsl(var(--foreground,220 14% 96%) / .8);font-size:.875rem;font-weight:500;text-decoration:none;transition:background-color .3s,color .3s}.ds-island-item:hover,.ds-island-item.is-active{color:hsl(var(--foreground,220 14% 96%));background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}.ds-island-item:focus-visible,.ds-island-icon:focus-visible{outline:2px solid hsl(var(--ring,16 100% 56%));outline-offset:3px}.ds-island-icon{display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:9999px;background:transparent;color:hsl(var(--foreground,220 14% 96%) / .8);cursor:pointer;transition:background-color .3s}.ds-island-icon:hover{background:hsl(var(--surface-2,222 12% 11%));color:hsl(var(--foreground,220 14% 96%))}"
+    },
+    {
+      "name": "Size Chip",
+      "kind": "chip",
+      "refersTo": null,
+      "description": "Size and filter chip: 12px corners, Chalk fill when selected.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\">8</button><button class=\"ds-chip is-on\" aria-pressed=\"true\">9</button><button class=\"ds-chip\">10</button></div>",
+      "css": ".ds-chips{display:flex;gap:6px}.ds-chip{min-width:56px;height:40px;border:1px solid hsl(var(--surface-3,222 10% 16%));border-radius:12px;background:transparent;color:hsl(var(--foreground,220 14% 96%));font-family:'Archivo Variable',system-ui,sans-serif;font-size:.875rem;font-variant-numeric:tabular-nums;cursor:pointer;transition:border-color .3s,background-color .3s,color .3s}.ds-chip:hover{border-color:hsl(var(--foreground,220 14% 96%) / .5)}.ds-chip.is-on{border-color:hsl(var(--foreground,220 14% 96%));background:hsl(var(--foreground,220 14% 96%));color:hsl(var(--background,220 18% 3%))}.ds-chip:focus-visible{outline:2px solid hsl(var(--ring,16 100% 56%));outline-offset:3px}"
+    },
+    {
+      "name": "Product Card",
+      "kind": "card",
+      "refersTo": "product-card",
+      "description": "4:5 steel tile lit by its colourway; tilts toward the pointer in the live build (adapted from 21st.dev Product Card).",
+      "html": "<article class=\"ds-card\" style=\"--glow:16 100% 56%\"><div class=\"ds-card-tile\"><span class=\"ds-card-badge\">−20%</span><div class=\"ds-card-light\"></div><div class=\"ds-card-shoe\"></div></div><div class=\"ds-card-meta\"><h3>Air Runner</h3><span class=\"ds-card-price\">$128</span></div><p class=\"ds-card-sub\">Daily trainer · Unisex</p></article>",
+      "css": ".ds-card{width:260px;font-family:'Archivo Variable',system-ui,sans-serif;color:hsl(var(--foreground,220 14% 96%))}.ds-card-tile{position:relative;aspect-ratio:4/5;overflow:hidden;border:1px solid rgba(255,255,255,.06);border-radius:28px;background:hsl(var(--surface,222 14% 7%));box-shadow:inset 0 1px 0 0 hsl(0 0% 100% / .07),0 24px 60px -24px hsl(0 0% 0% / .8);transition:transform .7s cubic-bezier(.16,1,.3,1)}.ds-card-tile:hover{transform:perspective(1100px) rotateX(4deg) rotateY(-5deg)}.ds-card-light{position:absolute;inset:22% 12% 22%;border-radius:9999px;background:radial-gradient(closest-side,hsl(var(--glow) / .45),transparent);filter:blur(40px);opacity:.6;transition:opacity .7s}.ds-card-tile:hover .ds-card-light{opacity:.9}.ds-card-shoe{position:absolute;left:14%;right:14%;top:40%;height:22%;border-radius:40% 60% 30% 30%;background:linear-gradient(135deg,#24272E,#FF5A1F);transform:rotate(-10deg);filter:drop-shadow(0 30px 40px rgba(0,0,0,.65))}.ds-card-badge{position:absolute;left:16px;top:16px;z-index:2;padding:6px 12px;border-radius:9999px;background:hsl(var(--signal,16 100% 56%));color:hsl(var(--signal-foreground,220 18% 3%));font-size:.6875rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase}.ds-card-meta{display:flex;justify-content:space-between;gap:12px;margin-top:16px;padding:0 4px}.ds-card-meta h3{margin:0;font-size:1rem;font-weight:600}.ds-card-price{font-weight:600;font-variant-numeric:tabular-nums;color:hsl(var(--signal,16 100% 56%))}.ds-card-sub{margin:4px 0 0;padding:0 4px;font-size:.875rem;color:hsl(var(--muted-foreground,220 6% 60%))}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Night-Lit Product Lab",
+    "overview": "Every shoe is staged as a lit object in a dark room. The page is a near-black stage with cool steel surfaces; the only warm colour is a single ember signal reserved for action. The light in the room is not fixed: an ambient glow token (`--glow`) is re-tinted at runtime from the most saturated swatch of the colourway on show, so switching shoe or colourway changes the colour of the whole stage. A faint 64px engineering grid, fading out toward the edges, sits under hero and feature stages.\n\nType does the shouting. Headlines are Archivo stretched to its widest (wdth 125), extra-bold, upper case and tightly set; everything else is Archivo at normal width, quiet and legible. Motion is soft and long: one exponential ease, blur-to-sharp entrances, springs for anything the hand touches, and Lenis smooth scrolling. With reduced motion, everything is static.\n\nThe theme is dark only (`color-scheme: dark`). There is no light mode to maintain.",
+    "keyCharacteristics": [
+      "Near-black stage, three steel surface steps, hairline borders.",
+      "One ember accent for actions, sale flags and focus; nothing else is warm.",
+      "Colourway-driven ambient light (`--glow`) as the signature device.",
+      "Expanded, extra-bold, upper-case display type over normal-width UI text.",
+      "Pills everywhere you click; generously rounded (28px) cards and panels.",
+      "Blur-to-sharp rises, spring tilts and orbit rings; all of it off under reduced motion."
+    ],
+    "rules": [
+      {
+        "name": "The One Ember Rule",
+        "body": "Ember is the only warm UI colour, and it means \"act\" or \"deal\". It is never used as decoration, as a section background, or for a heading.",
+        "section": "colors"
+      },
+      {
+        "name": "The Borrowed Light Rule",
+        "body": "Atmospheric colour comes from the product, never from a palette pick. Glows, card light and the hero stage read `--glow`; set it from `glowFromSwatch()` on the element that owns the colourway.",
+        "section": "colors"
+      },
+      {
+        "name": "The Width-Is-Hierarchy Rule",
+        "body": "Rank is expressed by Archivo's width axis and weight, not by switching families. Never add a second typeface.",
+        "section": "typography"
+      },
+      {
+        "name": "The Stage-First Rule",
+        "body": "On any surface that sells one shoe, the shoe gets the largest area on the screen, and type never overlaps it.",
+        "section": "layout"
+      },
+      {
+        "name": "The Light-Not-Shadow Rule",
+        "body": "Lift is shown with a top highlight and coloured light. Hard, offset or opaque shadows are not part of this world.",
+        "section": "elevation & depth"
+      }
+    ],
+    "dos": [
+      "**Do** set `--glow` from the active colourway (`glowFromSwatch`) on any stage, card or section that shows one shoe.",
+      "**Do** keep Ember for the single commit action per view, sale signals and focus.",
+      "**Do** set headlines in the display style (wdth 125, 800, upper case, 0.92 leading) and everything else at normal width.",
+      "**Do** make every button, badge and nav item a pill and every product container 28px-rounded.",
+      "**Do** enter sections with the shared rise variant and the site ease; use springs for anything the pointer moves.",
+      "**Do** gate every looping or pointer-driven motion behind `prefers-reduced-motion`.",
+      "**Do** use tabular figures for prices, counts and sizes."
+    ],
+    "donts": [
+      "**Don't** introduce a light theme, white tiles or a white page section; the stage is always dark.",
+      "**Don't** add a second accent colour or use Ember as a fill for decoration or headings.",
+      "**Don't** add a second typeface or a system display face; widths of Archivo carry the hierarchy.",
+      "**Don't** use hard, offset or opaque shadows; depth is a top highlight and coloured light.",
+      "**Don't** put small upper-case labels above headlines as decoration; labels name controls and data only.",
+      "**Don't** use photography or renders that show any other brand's logo, or place type over the shoe."
+    ]
+  }
+}

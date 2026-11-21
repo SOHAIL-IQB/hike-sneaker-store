@@ -1,0 +1,31 @@
+name: Bug report
+description: Something on the site doesn't work or looks broken
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you see, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to /products
+        2. Pick a size
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Browser and device
+      placeholder: e.g. Chrome 130 on macOS, Safari on iPhone 15
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Drag images here if they help.
