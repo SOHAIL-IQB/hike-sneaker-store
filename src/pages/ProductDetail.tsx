@@ -1,17 +1,16 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { products } from "@/lib/products";
-import { useCart } from "@/context/CartContext";
+import { getProduct } from "@/data/products";
+import { useShop } from "@/store/ShopProvider";
 import { trackEvent } from "@/lib/analytics";
-
-const sizes = ["7", "8", "9", "10", "11", "12"];
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
-  const product = products.find((p) => p.id === id);
-  const [selectedSize, setSelectedSize] = useState(sizes[2]);
+  const { addToBag } = useShop();
+  const product = getProduct(id);
+  const sizes = product?.sizes ?? [];
+  const [selectedSize, setSelectedSize] = useState(sizes[Math.min(6, sizes.length - 1)] ?? "");
 
   useEffect(() => {
     if (product) {
@@ -32,7 +31,7 @@ const ProductDetail = () => {
   }
 
   const handleAdd = () => {
-    addToCart(product, selectedSize);
+    addToBag(product.id, product.colorways[0].id, selectedSize);
     trackEvent("add_to_cart", {
       item_id: product.id,
       item_name: product.name,
@@ -46,7 +45,7 @@ const ProductDetail = () => {
       <div className="container grid grid-cols-1 md:grid-cols-5 gap-12 items-start">
         {/* Image — 60% */}
         <div className="md:col-span-3 bg-card flex items-center justify-center p-12">
-          <img src={product.image} alt={product.name} className="w-full max-w-md object-contain" />
+          <img src={product.colorways[0].image} alt={product.name} className="w-full max-w-md object-contain" />
         </div>
 
         {/* Details — 40% sticky */}

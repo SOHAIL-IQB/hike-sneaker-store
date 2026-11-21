@@ -1,20 +1,18 @@
 import type { Config } from "tailwindcss";
+import animate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
-  prefix: "",
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     container: {
       center: true,
-      padding: "1.5rem",
-      screens: {
-        "2xl": "1400px",
-      },
+      padding: { DEFAULT: "1.25rem", md: "2rem", lg: "3rem" },
+      screens: { "2xl": "1920px" },
     },
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: ['"Archivo Variable"', "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -42,6 +40,12 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
+        signal: {
+          DEFAULT: "hsl(var(--signal))",
+          foreground: "hsl(var(--signal-foreground))",
+          ink: "hsl(var(--signal-ink))",
+        },
+        success: "hsl(var(--success))",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -50,25 +54,14 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        nav: {
-          DEFAULT: "hsl(var(--nav-background))",
-          foreground: "hsl(var(--nav-foreground))",
-        },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "calc(var(--radius) - 0.5rem)",
+        sm: "calc(var(--radius) - 0.75rem)",
+      },
+      transitionTimingFunction: {
+        out: "var(--ease-out)",
       },
       keyframes: {
         "accordion-down": {
@@ -81,10 +74,10 @@ export default {
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        "accordion-down": "accordion-down 0.2s var(--ease-out)",
+        "accordion-up": "accordion-up 0.2s var(--ease-out)",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [animate],
 } satisfies Config;

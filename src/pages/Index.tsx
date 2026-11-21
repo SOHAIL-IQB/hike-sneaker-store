@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import heroShoe from "@/assets/hero-shoe.png";
-import { products } from "@/lib/products";
+import { products, sortProducts } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 
 const Index = () => (
@@ -37,7 +37,7 @@ const Index = () => (
     <section className="container py-20">
       <h2 className="text-2xl font-extrabold tracking-wide mb-10">FEATURED</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {products.map((p) => (
+        {sortProducts(products, "featured").slice(0, 4).map((p) => (
           <ProductCard key={p.id} product={p} />
         ))}
       </div>

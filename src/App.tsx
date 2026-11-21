@@ -1,25 +1,22 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { CartProvider } from "@/context/CartContext";
+import { ShopProvider } from "@/store/ShopProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Index from "@/pages/Index";
-import Products from "@/pages/Products";
-import ProductDetail from "@/pages/ProductDetail";
-import Cart from "@/pages/Cart";
-import Checkout from "@/pages/Checkout";
-import NotFound from "@/pages/NotFound";
-import { useEffect } from "react";
-import { initGA4 } from "@/lib/analytics";
 
-const App = () => {
-  useEffect(() => {
-    initGA4();
-  }, []);
+// The home page ships in the main bundle; every other route loads on demand.
+const Products = lazy(() => import("@/pages/Products"));
+const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
+const Cart = lazy(() => import("@/pages/Cart"));
+const Checkout = lazy(() => import("@/pages/Checkout"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
 
-  return (
-    <CartProvider>
-      <BrowserRouter>
-        <Navbar />
+const App = () => (
+  <ShopProvider>
+    <BrowserRouter>
+      <Navbar />
+      <Suspense fallback={<div className="min-h-[60vh]" aria-busy="true" />}>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/products" element={<Products />} />
@@ -28,10 +25,10 @@ const App = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <Footer />
-      </BrowserRouter>
-    </CartProvider>
-  );
-};
+      </Suspense>
+      <Footer />
+    </BrowserRouter>
+  </ShopProvider>
+);
 
 export default App;

@@ -1,4 +1,4 @@
-import { products } from "@/lib/products";
+import { products } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 
 const Products = () => (

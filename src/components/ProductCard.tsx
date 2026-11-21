@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { Product } from "@/lib/products";
+import { formatPrice, type Product } from "@/data/products";
 
 const ProductCard = ({ product }: { product: Product }) => (
   <Link
@@ -9,7 +9,7 @@ const ProductCard = ({ product }: { product: Product }) => (
     <div className="bg-card overflow-hidden transition-transform duration-200 group-hover:scale-[1.02]">
       <div className="aspect-square flex items-center justify-center p-8">
         <img
-          src={product.image}
+          src={product.colorways[0].image}
           alt={product.name}
           className="w-full h-full object-contain"
           loading="lazy"
@@ -18,7 +18,7 @@ const ProductCard = ({ product }: { product: Product }) => (
     </div>
     <div className="mt-3 space-y-1">
       <h3 className="text-sm font-bold tracking-wide">{product.name.toUpperCase()}</h3>
-      <p className="text-sm text-muted-foreground">${product.price}</p>
+      <p className="text-sm text-muted-foreground">{formatPrice(product.price)}</p>
     </div>
   </Link>
 );

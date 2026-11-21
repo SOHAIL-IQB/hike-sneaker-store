@@ -1,10 +1,10 @@
-import { useCart } from "@/context/CartContext";
+import { useShop } from "@/store/ShopProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { Minus, Plus, X } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 
 const Cart = () => {
-  const { items, updateQuantity, removeFromCart, totalPrice } = useCart();
+  const { bag: items, setQuantity, removeLine, subtotal: totalPrice } = useShop();
   const navigate = useNavigate();
 
   const handleCheckout = () => {
@@ -44,9 +44,9 @@ const Cart = () => {
 
         <div className="space-y-6">
           {items.map((item) => (
-            <div key={item.product.id} className="flex gap-6 border-b border-border pb-6">
+            <div key={item.key} className="flex gap-6 border-b border-border pb-6">
               <div className="w-24 h-24 bg-card flex-shrink-0 flex items-center justify-center p-2">
-                <img src={item.product.image} alt={item.product.name} className="w-full h-full object-contain" />
+                <img src={item.colorway.image} alt={item.product.name} className="w-full h-full object-contain" />
               </div>
               <div className="flex-1 space-y-1">
                 <div className="flex justify-between items-start">
@@ -54,21 +54,21 @@ const Cart = () => {
                     <h3 className="text-sm font-bold tracking-wide">{item.product.name.toUpperCase()}</h3>
                     <p className="text-xs text-muted-foreground">Size {item.size}</p>
                   </div>
-                  <button onClick={() => removeFromCart(item.product.id)} className="text-muted-foreground hover:text-foreground">
+                  <button onClick={() => removeLine(item.key)} className="text-muted-foreground hover:text-foreground">
                     <X className="w-4 h-4" strokeWidth={1.5} />
                   </button>
                 </div>
                 <p className="text-sm font-bold">${item.product.price}</p>
                 <div className="flex items-center gap-3 mt-2">
                   <button
-                    onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                    onClick={() => setQuantity(item.key, item.quantity - 1)}
                     className="w-8 h-8 border border-border flex items-center justify-center hover:bg-secondary transition-colors"
                   >
                     <Minus className="w-3 h-3" strokeWidth={1.5} />
                   </button>
                   <span className="text-sm font-bold w-6 text-center">{item.quantity}</span>
                   <button
-                    onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                    onClick={() => setQuantity(item.key, item.quantity + 1)}
                     className="w-8 h-8 border border-border flex items-center justify-center hover:bg-secondary transition-colors"
                   >
                     <Plus className="w-3 h-3" strokeWidth={1.5} />

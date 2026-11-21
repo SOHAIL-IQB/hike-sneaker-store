@@ -2,49 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Hike design tokens.
+ * White ground, ink type, grey product tiles, one signal orange.
+ * --signal is the fill colour (flags, badges, focus halo); --signal-ink is the
+ * same hue darkened to pass 4.5:1 for text on white and on tile grey.
+ */
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 10%;
+    --foreground: 0 0% 7%; /* #111111 */
 
-    --card: 0 0% 96%;
-    --card-foreground: 0 0% 10%;
+    --card: 0 0% 96%; /* tile grey #F5F5F5 */
+    --card-foreground: 0 0% 7%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
+    --popover-foreground: 0 0% 7%;
 
-    --primary: 0 0% 0%;
+    --primary: 0 0% 7%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 10%;
+    --secondary-foreground: 0 0% 7%;
 
     --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted-foreground: 240 1% 44%; /* #707072 — 4.9:1 on white */
 
-    --accent: 20 100% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 7%;
 
-    --destructive: 0 84% 60%;
+    --signal: 16 100% 56%; /* #FF5A1F */
+    --signal-foreground: 0 0% 7%;
+    --signal-ink: 21 90% 40%; /* #C2410C — 5.2:1 on white */
+
+    --success: 145 63% 32%;
+    --destructive: 0 72% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 20 100% 50%;
+    --border: 0 0% 90%; /* #E5E5E5 */
+    --input: 0 0% 80%;
+    --ring: 0 0% 7%;
 
-    --radius: 0.125rem;
+    --radius: 1.25rem;
 
-    --nav-background: 0 0% 0%;
-    --nav-foreground: 0 0% 100%;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --header-h: 60px;
+    --promo-h: 36px;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 
@@ -52,10 +55,86 @@
   * {
     @apply border-border;
   }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "ss01", "cv11";
+    caret-color: hsl(var(--signal-ink));
   }
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight uppercase;
+
+  ::selection {
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  /* One focus treatment for every control: an ink ring with a white gap. */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  button,
+  [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prices, counts and sizes line up in tables and summaries. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(0 0% 75%) transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Archivo's width axis carries the hierarchy: condensed for display, normal for UI. */
+  .stretch-condensed {
+    font-stretch: 62%;
+  }
+  .stretch-semi-condensed {
+    font-stretch: 80%;
+  }
+  .stretch-normal {
+    font-stretch: 100%;
+  }
+
+  .text-display {
+    font-stretch: 62%;
+    font-weight: 900;
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }

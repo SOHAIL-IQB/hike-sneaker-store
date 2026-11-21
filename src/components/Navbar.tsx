@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { ShoppingBag, Menu, X } from "lucide-react";
-import { useCart } from "@/context/CartContext";
+import { useShop } from "@/store/ShopProvider";
 import { useState } from "react";
 
 const Navbar = () => {
-  const { totalItems } = useCart();
+  const { bagCount: totalItems } = useShop();
   const [open, setOpen] = useState(false);
 
   return (

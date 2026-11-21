@@ -1,11 +1,11 @@
-import { useCart } from "@/context/CartContext";
+import { useShop } from "@/store/ShopProvider";
 import { useState } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { Link } from "react-router-dom";
 import { CheckCircle } from "lucide-react";
 
 const Checkout = () => {
-  const { items, totalPrice, clearCart } = useCart();
+  const { bag: items, subtotal: totalPrice, clearBag: clearCart } = useShop();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [ordered, setOrdered] = useState(false);
@@ -69,7 +69,7 @@ const Checkout = () => {
         {/* Order summary */}
         <div className="space-y-3 mb-8">
           {items.map((item) => (
-            <div key={item.product.id} className="flex justify-between text-sm">
+            <div key={item.key} className="flex justify-between text-sm">
               <span>
                 {item.product.name} × {item.quantity} (Size {item.size})
               </span>
