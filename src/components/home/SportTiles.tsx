@@ -57,7 +57,10 @@ export default function SportTiles() {
                   src={p.colorways[0].image}
                   alt=""
                   loading="lazy"
-                  className="pointer-events-none absolute -bottom-[6%] -right-[4%] w-[62%] max-w-[420px] -rotate-[14deg] object-contain drop-shadow-[0_30px_40px_rgba(0,0,0,0.6)] transition-transform duration-[900ms] ease-out group-hover:-translate-y-4 group-hover:-rotate-[20deg] group-hover:scale-105"
+                  className={cn(
+                    "pointer-events-none absolute -bottom-[6%] -right-[4%] max-w-[420px] -rotate-[14deg] object-contain drop-shadow-[0_30px_40px_rgba(0,0,0,0.6)] transition-transform duration-[900ms] ease-out group-hover:-translate-y-4 group-hover:-rotate-[20deg] group-hover:scale-105",
+                    i === 0 ? "w-[62%]" : "w-[50%] md:w-[44%]",
+                  )}
                 />
               </Link>
             </motion.li>
