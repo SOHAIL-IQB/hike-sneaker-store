@@ -15,17 +15,17 @@ Verification commands: `npm run lint`, `npm test`, `npm run build`. Visual check
 - [x] **5. Store.** Cart, favorites and recently viewed in localStorage.
   - Accept: unit tests cover add, merge, update, remove and persistence.
 
-## Phase 2: Shopping flow
-- [ ] **6. Shell.** Header, mega-menu, search, mobile drawer, footer.
-- [ ] **7. Home.** Hero, rails, shop by sport, story, newsletter.
-- [ ] **8. Product listing.** Filters, sort, search, category routes, empty state.
-- [ ] **9. Product detail.** Gallery, colorways, size grid, size guide, add to bag, favorite, related products.
-- [ ] **10. Bag.** Mini-cart drawer and cart page.
-- [ ] **11. Checkout.** Steps, validation, confirmation page.
+## Phase 2: Shopping flow (futuristic redesign, 21st.dev components, Framer Motion + Lenis)
+- [x] **6. Shell.** Header, mega-menu, search, mobile drawer, footer.
+- [x] **7. Home.** Hero, rails, shop by sport, story, newsletter.
+- [x] **8. Product listing.** Filters, sort, search, category routes, empty state.
+- [x] **9. Product detail.** Gallery, colorways, size grid, size guide, add to bag, favorite, related products.
+- [x] **10. Bag.** Mini-cart drawer and cart page.
+- [x] **11. Checkout.** Steps, validation, confirmation page.
   - Accept (6–11): works by keyboard, responsive, existing GA4 events still fire.
 
 ## Phase 3: Polish
-- [ ] **12. Favorites page, 404, skeletons.**
+- [x] **12. Favorites page, 404, skeletons.**
 - [ ] **13. Motion, accessibility and performance pass.**
 - [ ] **14. Design critique and finish review, plus fixes.**
 

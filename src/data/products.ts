@@ -542,3 +542,8 @@ export const relatedProducts = (product: Product, count = 4) =>
   )
     .sort((a, b) => Number(b.category === product.category) - Number(a.category === product.category))
     .slice(0, count);
+
+// ——— Shipping (demo rules) ———
+export const FREE_SHIPPING_FROM = 100;
+export const SHIPPING_FEE = 8;
+export const shippingFor = (subtotal: number) => (subtotal === 0 || subtotal >= FREE_SHIPPING_FROM ? 0 : SHIPPING_FEE);

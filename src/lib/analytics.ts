@@ -26,3 +26,15 @@ export const trackEvent = (eventName: string, params?: Record<string, unknown>) 
     console.info(`[GA4] ${eventName}`, params);
   }
 };
+
+interface LineLike {
+  product: { id: string; name: string; price: number };
+  quantity: number;
+}
+
+/** GA4 items[] in the exact shape the first version sent. */
+export const gaItems = (lines: LineLike[]) =>
+  lines.map((l) => ({ item_id: l.product.id, item_name: l.product.name, price: l.product.price, quantity: l.quantity }));
+
+export const trackBeginCheckout = (lines: LineLike[], value: number) =>
+  trackEvent("begin_checkout", { value, items: gaItems(lines) });

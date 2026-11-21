@@ -7,32 +7,34 @@ related_targets: ["src/pages/Products.tsx","src/pages/ProductDetail.tsx","src/pa
 
 # Surface brief: Hike storefront (home, listing, product, bag, checkout)
 
-Scope: the home page (Persuade), plus the shopping screens it leads into: listing, product detail, bag and checkout (Operate).
-Audience: sneaker shoppers on phone and desktop, and portfolio reviewers. Job: find a pair, pick a size, buy.
-Constraints: frontend only, GA4 events kept, original Hike identity.
-Chosen direction: the category standard (the user chose it on 2026-11-21). The craft bar is Nike, Adidas and Puma, which the user named.
+Scope: home (Persuade) plus listing, product detail, bag, checkout, favorites (Operate).
+Audience: sneaker shoppers on phone and desktop; portfolio reviewers.
+Job: find a pair, pick a size, buy.
+Constraints: frontend only; keep GA4 events; original Hike identity.
+Chosen direction: the user pinned it on 2026-11-21, replacing the earlier canon pick: "a good futuristic design with smooth motion, like leading frontend websites", built with 21st.dev components. The craft bar is still Nike, Adidas and Puma.
 
 ## Direction contract
 
-THESIS: Hike as a big-sportswear storefront played straight, at the craft level of Nike, Adidas and Puma. It is image-led, fast and grid-dense. It keeps every convention a shopper expects and borrows none of those brands' identity: no swoosh, stripes or cat, and Hike's own wordmark, type and copy.
+THESIS: Hike as a night-lit product lab. Every shoe is staged as a lit object floating in a dark room, and the ambient light takes on the colour of the colourway on show. It refuses the white-tile catalogue grid as the first impression.
 
 OWN-WORLD:
-- Colors: white ground #FFFFFF, ink #111111, tile grey #F5F5F5, secondary text #707072, hairlines #E5E5E5. One Hike accent, signal orange #FF5A1F, used only for New/Sale flags, sale prices and focus rings.
-- Type: Archivo throughout. Headlines are condensed (wdth 62–75), weight 800–900, uppercase, leading 0.9. UI text is normal width, weight 400–600.
-- Components: black pill primary buttons and outlined pill secondaries. Square grey product tiles with the shoe centered, and name, category, color count and price stacked under them. A rectangular outlined size grid. Lucide icons at 1.5 stroke.
+- Ground and surfaces: near-black stage #06070A, steel surfaces #101217 and #181B21, hairline borders #22252B.
+- Accent: one ember signal #FF5A1F for actions, flags and focus.
+- Glow: an ambient radial glow driven by the --glow token from each colourway's swatch, plus a faint 64px engineering grid.
+- Type: Archivo expanded (wdth 125, weight 800) for headlines; normal width for UI text.
+- Components: pill buttons; floating island header with a morphing pill indicator; 3D tilt product cards with a cursor-tracking glow (21st.dev Product Card); dashed orbit rings around hero products (21st.dev Spatial Product Showcase).
 
-STORY: In one screen the visitor sees this season's campaign, then that Hike covers Running, Lifestyle, Training and Basketball. They browse what's trending, filter, pick a size, add to bag and check out without friction.
+STORY: The visitor meets the Air Runner floating in its own light and can change colourway, pick a size and add it to the bag right there. They then move into sports, the trending rail, the tech story and the full catalogue.
 
 FIRST VIEWPORT:
-- A 36px promo bar with rotating messages.
-- A 60px header: the wordmark on the left. In the middle, New & Featured, Running, Lifestyle, Training, Basketball and Sale, which open mega-menus. On the right, a search pill, favorites and the bag with its count.
-- A campaign media panel, full width and about 68vh, showing the hero shoe big on a graded studio field.
-- Under the media, centered: a huge condensed headline and one line of copy, with no label above the headline. Then two pills, "Shop Running" (primary) and "Shop Air Runner".
-- The top of the "Trending now" rail shows at the fold. Its tiles have quick-add.
+- Floating island header across the top.
+- Left: the product name huge in expanded caps, a one-line tagline, the price, a size row and "Add to bag".
+- Right: the shoe at about 55vw, floating in an orbit ring and lit by its colourway glow, with a parallax drift.
+- Bottom centre: a floating dock switches between four featured shoes. The background glow and grid re-tint on every switch.
 
-Signature interaction: hovering a product tile crossfades to another colorway and shows its swatches. Adding to bag slides in an "Added to Bag" panel from the header with the item, size and a checkout button.
-Motion grammar: 200ms ease-out fades and 300ms slides, no bounce. With reduced motion, everything is instant.
+Signature interaction: switching shoe or colourway re-tints the page's ambient light, and the shoe blurs out and springs back in.
+Motion grammar: Lenis smooth scroll, blur-to-sharp rises on section entry, spring layout transitions on filters and pills, and one scroll-linked lab sequence where the shoe rotates and the spec callouts draw in. With reduced motion everything is static.
 
-FORM: the category standard, the user's standing-exit choice over the roll. seed:bc96e574699a10a8
+FORM: user-pinned direction. seed: none (pinned) — "a good futuristick desgine with smoth moton … use the 21st MCP"
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
