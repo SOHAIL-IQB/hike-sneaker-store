@@ -6,13 +6,13 @@ Verification commands: `npm run lint`, `npm test`, `npm run build`. Visual check
 - [x] **1. Visual direction.** Big-sportswear standard chosen. Contract in `.impeccable/surfaces/src-pages-index-tsx.md`. DESIGN.md comes after the build (Task 14).
 
 ## Phase 1: Foundation
-- [ ] **2. Prune and infrastructure.** Remove unused shadcn components and deps, add `vercel.json` rewrite, lazy-load routes.
+- [x] **2. Prune and infrastructure.** Remove unused shadcn components and deps, add `vercel.json` rewrite, lazy-load routes.
   - Accept: build passes, bundle is smaller, refreshing a deep link works in `vite preview`.
-- [ ] **3. Tokens, fonts, logo, favicon.**
+- [x] **3. Tokens, fonts, logo, favicon.**
   - Accept: theme tokens are in Tailwind and CSS variables, the original Hike logo is an SVG, a new favicon is in place.
 - [ ] **4. Catalog.** About 18 products with categories, colorways, sizes and badges, plus WebP images.
   - Accept: typed data, every product has alt text, images are credited.
-- [ ] **5. Store.** Cart, favorites and recently viewed in localStorage.
+- [x] **5. Store.** Cart, favorites and recently viewed in localStorage.
   - Accept: unit tests cover add, merge, update, remove and persistence.
 
 ## Phase 2: Shopping flow

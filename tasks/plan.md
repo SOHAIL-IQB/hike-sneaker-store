@@ -39,10 +39,10 @@ The GitHub repo also gets polished:
 ### Checkpoint: Direction approved ✅ (2026-11-21)
 
 ### Phase 1: Foundation
-- [ ] Task 2: Prune unused components and dependencies, add the SPA rewrite, set up route-level lazy loading.
-- [ ] Task 3: Design tokens (Tailwind theme and CSS variables), fonts, the new Hike logo and favicon.
+- [x] Task 2: Prune unused components and dependencies, add the SPA rewrite, set up route-level lazy loading.
+- [x] Task 3: Design tokens (Tailwind theme and CSS variables), fonts, the new Hike logo and favicon.
 - [ ] Task 4: Expanded catalog data model, about 18 products, and optimized images.
-- [ ] Task 5: Persistent cart, favorites and recently-viewed store, with unit tests.
+- [x] Task 5: Persistent cart, favorites and recently-viewed store, with unit tests.
 
 ### Checkpoint: Foundation
 - [ ] `npm run build`, `npm run lint` and `npm test` all pass, and the app runs with the new tokens.
