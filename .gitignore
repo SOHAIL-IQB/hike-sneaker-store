@@ -153,6 +153,3 @@ dist-ssr
 *.sln
 *.sw?
 
-# Design working files (decision-page sketches)
-.impeccable/sketches/
-.impeccable/direction-round.json
