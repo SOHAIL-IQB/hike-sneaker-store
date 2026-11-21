@@ -166,7 +166,7 @@ function ProductView({ product }: { product: Product }) {
                     src={colorway.image}
                     alt={`${product.name} in ${colorway.name}`}
                     initial={{ opacity: 0, scale: 1.15, x: 40, filter: "blur(14px)" }}
-                    animate={{ opacity: 1, scale: 1, x: 0, filter: "blur(0px)", transition: { type: "spring", stiffness: 140, damping: 18 } }}
+                    animate={{ opacity: 1, scale: 1, x: 0, filter: "blur(0px)", transition: { filter: { type: "tween", duration: 0.6, ease: [0.16, 1, 0.3, 1] }, type: "spring", stiffness: 140, damping: 18 } }}
                     exit={{ opacity: 0, scale: 0.85, x: -40, filter: "blur(14px)", transition: { duration: 0.25 } }}
                     className="w-full object-contain drop-shadow-[0_50px_50px_rgba(0,0,0,0.7)]"
                     draggable={false}

@@ -29,7 +29,7 @@ const IMG_H = 684;
 
 const textItem = {
   hidden: { opacity: 0, y: 22, filter: "blur(10px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { type: "spring", stiffness: 110, damping: 20 } },
+  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { filter: { type: "tween", duration: 0.6, ease: [0.16, 1, 0.3, 1] }, type: "spring", stiffness: 110, damping: 20 } },
   exit: { opacity: 0, y: -12, filter: "blur(6px)", transition: { duration: 0.2 } },
 } as const;
 
@@ -169,7 +169,7 @@ export default function HeroShowcase() {
                   custom={direction}
                   variants={{
                     initial: (d: number) => ({ opacity: 0, scale: 1.25, rotate: d * 24 - 14, x: d * 90, filter: "blur(16px)" }),
-                    animate: { opacity: 1, scale: 1, rotate: -8, x: 0, filter: "blur(0px)", transition: { type: "spring", stiffness: 140, damping: 18 } },
+                    animate: { opacity: 1, scale: 1, rotate: -8, x: 0, filter: "blur(0px)", transition: { filter: { type: "tween", duration: 0.6, ease: [0.16, 1, 0.3, 1] }, type: "spring", stiffness: 140, damping: 18 } },
                     exit: (d: number) => ({ opacity: 0, scale: 0.7, rotate: -d * 20 - 14, x: -d * 60, filter: "blur(18px)", transition: { duration: 0.28 } }),
                   }}
                   initial="initial"
