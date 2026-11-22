@@ -94,7 +94,7 @@ export default function SearchOverlay() {
                 <motion.li
                   key={p.id}
                   layout
-                  initial={{ opacity: 0, y: 8 }}
+                  initial={{ opacity: 0.35, y: 8 }}
                   animate={{ opacity: 1, y: 0, transition: { delay: i * 0.03, duration: 0.4, ease: EASE } }}
                   exit={{ opacity: 0 }}
                 >

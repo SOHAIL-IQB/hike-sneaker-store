@@ -79,6 +79,20 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        // Starts at 55% rather than 0 on purpose: if the browser ever delays or pauses animations,
+        // the page is merely a little dim, never blank.
+        "page-in": {
+          from: { opacity: "0.55" },
+          to: { opacity: "1" },
+        },
+        draw: {
+          from: { strokeDashoffset: "1" },
+          to: { strokeDashoffset: "0" },
+        },
+        loading: {
+          from: { transform: "translateX(-100%)" },
+          to: { transform: "translateX(200%)" },
+        },
         marquee: {
           from: { transform: "translateX(0)" },
           to: { transform: "translateX(-50%)" },
@@ -87,6 +101,7 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s var(--ease-out)",
         "accordion-up": "accordion-up 0.2s var(--ease-out)",
+        "page-in": "page-in 0.3s var(--ease-out)",
       },
     },
   },

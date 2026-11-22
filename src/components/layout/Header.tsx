@@ -154,7 +154,7 @@ export default function Header() {
         {mega && (
           <motion.div
             key="mega"
-            initial={{ opacity: 0, y: -8, filter: "blur(8px)" }}
+            initial={{ opacity: 0.35, y: -8, filter: "blur(8px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: -8, filter: "blur(8px)" }}
             transition={{ duration: 0.35, ease: EASE }}
@@ -176,7 +176,7 @@ export default function Header() {
                 {megaProducts.map((p, i) => (
                   <motion.li
                     key={p.id}
-                    initial={{ opacity: 0, y: 12 }}
+                    initial={{ opacity: 0.35, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.05 * i, duration: 0.5, ease: EASE }}
                   >

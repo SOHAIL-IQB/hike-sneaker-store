@@ -33,7 +33,7 @@ export default function Membership() {
               <motion.p
                 ref={doneRef}
                 tabIndex={-1}
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0.35, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, ease: EASE }}
                 className="inline-flex items-center gap-2 rounded-full bg-success/10 px-5 py-3 text-success"

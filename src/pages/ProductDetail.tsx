@@ -165,7 +165,7 @@ function ProductView({ product }: { product: Product }) {
                     key={colorway.id}
                     src={colorway.image}
                     alt={`${product.name} in ${colorway.name}`}
-                    initial={{ opacity: 0, scale: 1.15, x: 40, filter: "blur(14px)" }}
+                    initial={{ opacity: 0.35, scale: 1.15, x: 40, filter: "blur(14px)" }}
                     animate={{ opacity: 1, scale: 1, x: 0, filter: "blur(0px)", transition: { filter: { type: "tween", duration: 0.6, ease: [0.16, 1, 0.3, 1] }, type: "spring", stiffness: 140, damping: 18 } }}
                     exit={{ opacity: 0, scale: 0.85, x: -40, filter: "blur(14px)", transition: { duration: 0.25 } }}
                     className="w-full object-contain drop-shadow-[0_50px_50px_rgba(0,0,0,0.7)]"
@@ -202,7 +202,7 @@ function ProductView({ product }: { product: Product }) {
 
           {/* Buy box */}
           <div className="pb-8">
-            <motion.div initial={{ opacity: 0, y: 24, filter: "blur(10px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 0.8, ease: EASE }}>
+            <motion.div initial={{ opacity: 0.35, y: 24, filter: "blur(10px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 0.8, ease: EASE }}>
               <h1 className="text-display text-[clamp(2.5rem,5vw,4.25rem)]">{product.name.replace(/^Hike /, "")}</h1>
               <p className="mt-3 text-muted-foreground">
                 {genderLabel(product)} {product.tagline.toLowerCase()}

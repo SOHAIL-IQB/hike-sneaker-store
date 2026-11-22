@@ -28,7 +28,7 @@ const IMG_W = 744;
 const IMG_H = 684;
 
 const textItem = {
-  hidden: { opacity: 0, y: 22, filter: "blur(10px)" },
+  hidden: { opacity: 0.35, y: 22, filter: "blur(10px)" },
   show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { filter: { type: "tween", duration: 0.6, ease: [0.16, 1, 0.3, 1] }, type: "spring", stiffness: 110, damping: 20 } },
   exit: { opacity: 0, y: -12, filter: "blur(6px)", transition: { duration: 0.2 } },
 } as const;
@@ -190,7 +190,7 @@ export default function HeroShowcase() {
       {featured.length > 1 && (
         <div className="absolute inset-x-0 bottom-6 z-20 flex justify-center px-4 md:bottom-10">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0.35, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8, ease: EASE }}
             className="flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[hsl(222_14%_7%/0.7)] p-1.5 shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-2xl no-scrollbar"

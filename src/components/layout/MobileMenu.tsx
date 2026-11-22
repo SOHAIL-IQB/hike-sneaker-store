@@ -26,7 +26,7 @@ export default function MobileMenu() {
           {LINKS.map((l, i) => (
             <motion.li
               key={l.to}
-              initial={{ opacity: 0, x: -16 }}
+              initial={{ opacity: 0.35, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 + i * 0.04, duration: 0.6, ease: EASE }}
             >

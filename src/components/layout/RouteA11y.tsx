@@ -30,9 +30,13 @@ export default function RouteA11y() {
   const first = useRef(true);
   const announce = useRef<HTMLParagraphElement>(null);
 
+  // Keep the title in step with filters and search too (they change the query string, not the path).
   useEffect(() => {
     const title = titleFor(pathname, search);
     if (title) document.title = title;
+  }, [pathname, search]);
+
+  useEffect(() => {
     if (first.current) {
       first.current = false;
       return;
@@ -47,7 +51,7 @@ export default function RouteA11y() {
       }
     }, 450);
     return () => window.clearTimeout(timer);
-  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   return <p ref={announce} role="status" aria-live="polite" className="sr-only" />;
 }

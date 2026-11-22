@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Check, CreditCard, Lock, Package, Wallet } from "lucide-react";
 import { Button, ButtonLink } from "@/components/common/Button";
 import OrderSummary from "@/components/common/OrderSummary";
@@ -165,14 +165,9 @@ export default function Checkout() {
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-16">
           <form ref={formRef} onSubmit={next} noValidate>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={step}
-                initial={{ opacity: 0, x: 24, filter: "blur(6px)" }}
-                animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                exit={{ opacity: 0, x: -24, filter: "blur(6px)" }}
-                transition={{ duration: 0.45, ease: EASE }}
-              >
+            {/* Plain CSS fade-in: a stalled "wait for exit" animation here could leave the previous step on
+                screen and never show the next one (the black/stuck screen). */}
+            <div key={step} className="animate-page-in">
                 {step === 0 && (
                   <fieldset className="grid gap-4 sm:grid-cols-2">
                     <legend ref={stepHeading} tabIndex={-1} className="mb-4 text-xl font-semibold">
@@ -260,8 +255,8 @@ export default function Checkout() {
                     </dl>
                   </div>
                 )}
-              </motion.div>
-            </AnimatePresence>
+              </div>
+            
 
             <div className="mt-10 flex flex-wrap items-center gap-3">
               <Button type="submit" variant="signal" size="lg" disabled={placing} className="min-w-[220px]">
@@ -358,11 +353,12 @@ function Confirmation({ order }: { order: Order }): ReactNode {
       <div aria-hidden className="absolute inset-0 bg-grid" />
       <div aria-hidden className="absolute left-1/2 top-40 h-[50vmin] w-[50vmin] -translate-x-1/2 rounded-full bg-success/20 blur-[120px]" />
       <div className="container relative max-w-2xl text-center">
+        {/* Drawn with CSS: if the animation never runs, the finished tick is simply shown. */}
         <svg viewBox="0 0 80 80" className="mx-auto h-20 w-20" aria-hidden>
-          <motion.circle cx="40" cy="40" r="36" fill="none" stroke="hsl(var(--success))" strokeWidth="3" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.8, ease: EASE }} />
-          <motion.path d="M25 41l10 10 20-22" fill="none" stroke="hsl(var(--success))" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: 0.6, duration: 0.5, ease: EASE }} />
+          <circle cx="40" cy="40" r="36" pathLength="1" strokeDasharray="1" fill="none" stroke="hsl(var(--success))" strokeWidth="3" className="animate-[draw_0.8s_var(--ease-out)]" />
+          <path d="M25 41l10 10 20-22" pathLength="1" strokeDasharray="1" fill="none" stroke="hsl(var(--success))" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="animate-[draw_0.5s_var(--ease-out)_0.5s] [animation-fill-mode:backwards]" />
         </svg>
-        <motion.div initial={{ opacity: 0, y: 20, filter: "blur(10px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ delay: 0.3, duration: 0.8, ease: EASE }}>
+        <div className="animate-page-in">
           <h1 ref={headingRef} tabIndex={-1} className="text-display mt-8 text-[clamp(2.5rem,7vw,4.5rem)]">
             Order placed
           </h1>
@@ -387,7 +383,7 @@ function Confirmation({ order }: { order: Order }): ReactNode {
           <ButtonLink to="/products" className="mt-10">
             Keep shopping
           </ButtonLink>
-        </motion.div>
+        </div>
       </div>
     </main>
   );

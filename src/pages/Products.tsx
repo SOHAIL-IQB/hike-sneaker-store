@@ -187,7 +187,7 @@ export default function Products() {
   return (
     <main id="main" className="pb-10 pt-28 md:pt-36">
       <header className="container max-w-[1440px]">
-        <motion.div initial={{ opacity: 0, y: 20, filter: "blur(10px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 0.8, ease: EASE }}>
+        <motion.div initial={{ opacity: 0.35, y: 20, filter: "blur(10px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 0.8, ease: EASE }}>
           <p className="text-sm text-muted-foreground">{subtitle}</p>
           <h1 className="text-display mt-3 text-[clamp(2rem,9vw,6rem)]">
             {title}
@@ -277,7 +277,7 @@ export default function Products() {
             {list.length === 0 ? "No products match" : `${list.length} ${list.length === 1 ? "product" : "products"}`}
           </p>
           {list.length === 0 ? (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-start gap-5 rounded-[28px] border border-dashed border-surface-3 p-10">
+            <motion.div initial={{ opacity: 0.35 }} animate={{ opacity: 1 }} className="flex flex-col items-start gap-5 rounded-[28px] border border-dashed border-surface-3 p-10">
               <p className="text-display text-3xl">No matches</p>
               <p className="max-w-[46ch] text-muted-foreground">Nothing fits every filter you picked. Remove a size or price limit to see more.</p>
               <div className="flex flex-wrap gap-3">
@@ -296,7 +296,7 @@ export default function Products() {
                   <motion.li
                     key={p.id}
                     layout
-                    initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+                    initial={{ opacity: 0.35, y: 30, filter: "blur(8px)" }}
                     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     exit={{ opacity: 0, scale: 0.92, filter: "blur(6px)" }}
                     transition={{ duration: 0.6, ease: EASE, delay: Math.min(i, 8) * 0.04 }}

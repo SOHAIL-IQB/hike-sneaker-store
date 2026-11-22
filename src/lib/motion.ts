@@ -8,7 +8,7 @@ export const softSpring: Transition = { type: "spring", stiffness: 120, damping:
 
 /** Blur-to-sharp rise used for every section entrance. */
 export const rise: Variants = {
-  hidden: { opacity: 0, y: 28, filter: "blur(10px)" },
+  hidden: { opacity: 0.35, y: 28, filter: "blur(10px)" },
   show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.9, ease: EASE } },
 };
 
@@ -18,7 +18,7 @@ export const stagger = (gap = 0.08, delay = 0): Variants => ({
 });
 
 export const fade: Variants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0.35 },
   show: { opacity: 1, transition: { duration: 0.6, ease: EASE } },
 };
 

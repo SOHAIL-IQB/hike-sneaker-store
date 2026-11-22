@@ -21,7 +21,7 @@ const panelMotion = {
   right: { initial: { x: "104%" }, animate: { x: 0 }, exit: { x: "104%" } },
   left: { initial: { x: "-104%" }, animate: { x: 0 }, exit: { x: "-104%" } },
   top: {
-    initial: { y: -24, opacity: 0, filter: "blur(12px)" },
+    initial: { y: -24, opacity: 0.35, filter: "blur(12px)" },
     animate: { y: 0, opacity: 1, filter: "blur(0px)" },
     exit: { y: -24, opacity: 0, filter: "blur(12px)" },
   },
@@ -52,7 +52,7 @@ export default function Overlay({ open, onOpenChange, title, hideTitle, side = "
             <Dialog.Overlay asChild forceMount>
               <motion.div
                 className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm"
-                initial={{ opacity: 0 }}
+                initial={{ opacity: 0.35 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4, ease: EASE }}
