@@ -58,7 +58,7 @@ export default function SportTiles() {
                   alt=""
                   loading="lazy"
                   decoding="async"
-                  className="pointer-events-none absolute bottom-[7%] right-[4%] h-[84%] w-auto max-w-[56%] -rotate-[6deg] object-contain object-right-bottom drop-shadow-[0_30px_40px_rgba(0,0,0,0.6)] transition-transform duration-[900ms] ease-out group-hover:-translate-y-3 group-hover:-rotate-[10deg] group-hover:scale-[1.04] motion-reduce:transition-none"
+                  className="pointer-events-none absolute bottom-[7%] right-[4%] h-[84%] w-auto max-w-[56%] -rotate-[6deg] object-contain object-right-bottom drop-shadow-[0_30px_40px_rgba(0,0,0,0.6)] transition-transform [transition-duration:900ms] ease-out group-hover:-translate-y-3 group-hover:-rotate-[10deg] group-hover:scale-[1.04] motion-reduce:transition-none"
                 />
               </Link>
             </motion.li>
