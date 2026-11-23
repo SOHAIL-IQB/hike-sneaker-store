@@ -49,7 +49,7 @@ export function teardownUiEnv() {
 export function renderApp(route: string) {
   return render(
     <ShopProvider>
-      <MemoryRouter initialEntries={[route]} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <MemoryRouter initialEntries={[route]}>
         <UIProvider>
           <Routes>
             <Route path="/products/:id" element={<ProductDetail />} />

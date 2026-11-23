@@ -104,7 +104,7 @@ const App = () => (
   <MotionConfig reducedMotion="user">
     <ErrorBoundary>
       <ShopProvider>
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <BrowserRouter>
           <UIProvider>
             <Shell />
           </UIProvider>
